@@ -1,0 +1,7 @@
+name: BigDoorsPhysics
+version: '${version}'
+main: net.bonn2.bigdoorsphysics.BigDoorsPhysics
+api-version: 1.19
+depend: [ BigDoors, ProtocolLib ]
+authors: [ bonn2 ]
+description: An entire physics engine for what should be a standard tool.
