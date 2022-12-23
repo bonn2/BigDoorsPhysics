@@ -25,6 +25,9 @@ public class PhysicsListener implements Listener {
     private final Map<Long, BlockMover> BLOCK_MOVERS = new HashMap<>();
     private final Map<Long, List<ColliderBlock>> COLLIDERS = new HashMap<>();
 
+    public Map<Long, List<ColliderBlock>> getColliders() {
+        return COLLIDERS;
+    }
     @EventHandler
     public void onBigDoorsToggleStart(@NotNull DoorEventToggleStart startEvent) {
         if (startEvent.instantOpen()) return;

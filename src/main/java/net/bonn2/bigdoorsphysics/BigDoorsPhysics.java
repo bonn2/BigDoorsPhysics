@@ -12,11 +12,14 @@ public final class BigDoorsPhysics extends JavaPlugin {
     public static BigDoorsPhysics PLUGIN;
     public static YamlConfiguration CONFIG = new YamlConfiguration();
 
+    private PhysicsListener physicsListener;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
         PLUGIN = this;
 
+        getLogger().info("Loading Config");
         // Load config
         File configFile = new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml");
         try {
@@ -51,11 +54,19 @@ public final class BigDoorsPhysics extends JavaPlugin {
         }
 
         // Register Events
-        getServer().getPluginManager().registerEvents(new PhysicsListener(), this);
+        getLogger().info("Registering Events");
+        physicsListener = new PhysicsListener();
+        getServer().getPluginManager().registerEvents(physicsListener, this);
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        // Remove old barrier blocks
+        getLogger().info("Removing leftover colliders");
+        for (Long id : physicsListener.getColliders().keySet()) {
+            for (ColliderBlock colliderBlock : physicsListener.getColliders().get(id)) {
+                colliderBlock.remove();
+            }
+        }
     }
 }
