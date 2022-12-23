@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
+
 public class PhysicsListener implements Listener {
 
     private final Map<Long, BlockMover> BLOCK_MOVERS = new HashMap<>();
@@ -54,19 +56,22 @@ public class PhysicsListener implements Listener {
                     List<ColliderBlock> blocks = new ArrayList<>(doorBlocks.size());
                     for (MyBlockData doorBlock : doorBlocks) {
                         Location direction = new Location(doorBlock.getFBlock().getLocation().getWorld(), 0, 0, 0);
-                        Vector velocity = doorBlock.getFBlock().getVelocity();
-                        if (velocity.getX() > 0)
-                            direction = direction.add(1,0,0);
-                        if (velocity.getX() < 0)
-                            direction = direction.add(-1, 0, 0);
-                        if (velocity.getY() > 0)
-                            direction = direction.add(0, 1, 0);
-                        if (velocity.getY() < 0)
-                            direction = direction.add(0, -1, 0);
-                        if (velocity.getZ() > 0)
-                            direction = direction.add(0, 0, 1);
-                        if (velocity.getZ() < 0)
-                            direction = direction.add(0, 0, -1);
+                        // Only calculate direction if players should be moved
+                        if (CONFIG.getBoolean("move-players")) {
+                            Vector velocity = doorBlock.getFBlock().getVelocity();
+                            if (velocity.getX() > 0)
+                                direction = direction.add(1,0,0);
+                            if (velocity.getX() < 0)
+                                direction = direction.add(-1, 0, 0);
+                            if (velocity.getY() > 0)
+                                direction = direction.add(0, 1, 0);
+                            if (velocity.getY() < 0)
+                                direction = direction.add(0, -1, 0);
+                            if (velocity.getZ() > 0)
+                                direction = direction.add(0, 0, 1);
+                            if (velocity.getZ() < 0)
+                                direction = direction.add(0, 0, -1);
+                        }
                         blocks.add(new ColliderBlock(
                                     doorBlock.getFBlock().getLocation().add(0, 0.1, 0).toCenterLocation(),
                                     direction
