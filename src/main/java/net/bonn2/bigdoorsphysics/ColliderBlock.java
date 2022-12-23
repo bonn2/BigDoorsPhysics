@@ -25,6 +25,13 @@ public class ColliderBlock {
 
     public void place() {
         location.getWorld().setBlockData(location, Material.BARRIER.createBlockData());
+        // Hide block from distant players
+        for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
+            if (!player.getWorld().equals(location.getWorld())) continue;
+            double distance = location.distance(player.getLocation());
+            if (distance > 3 && distance < 128)
+                player.sendBlockChange(location, Material.AIR.createBlockData());
+        }
         if (Objects.equals(direction, new Location(location.getWorld(), 0, 0, 0))) return;
         // Handle clipping players
         for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
