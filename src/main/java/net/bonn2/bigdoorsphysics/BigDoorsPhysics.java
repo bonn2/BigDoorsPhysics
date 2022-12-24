@@ -38,6 +38,12 @@ public final class BigDoorsPhysics extends JavaPlugin {
                                     # This may have a small performance impact, primarily tps
                                     move-players: true
                                     
+                                    # Protect portcullises from self destruction
+                                    # This prevents the plugin from operating on portcullises that are either one block wide or deep
+                                    # This option will be removed when the bug is resolved
+                                    # Disabling this option will likely make these doors delete their blocks when they are closed
+                                    protect-portcullises: true
+                                    
                                     # DO NOT TOUCH
                                     config-version: 1
                                     """.getBytes(StandardCharsets.UTF_8)

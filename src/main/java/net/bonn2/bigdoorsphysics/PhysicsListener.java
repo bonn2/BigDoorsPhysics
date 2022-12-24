@@ -2,9 +2,11 @@ package net.bonn2.bigdoorsphysics;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import nl.pim16aap2.bigDoors.BigDoors;
+import nl.pim16aap2.bigDoors.events.DoorEventToggle;
 import nl.pim16aap2.bigDoors.events.DoorEventToggleEnd;
 import nl.pim16aap2.bigDoors.events.DoorEventToggleStart;
 import nl.pim16aap2.bigDoors.moveBlocks.BlockMover;
+import nl.pim16aap2.bigDoors.util.DoorType;
 import nl.pim16aap2.bigDoors.util.MyBlockData;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
+import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
 public class PhysicsListener implements Listener {
 
@@ -31,12 +34,30 @@ public class PhysicsListener implements Listener {
     @EventHandler
     public void onBigDoorsToggleStart(@NotNull DoorEventToggleStart startEvent) {
         if (startEvent.instantOpen()) return;
+        if (CONFIG.getBoolean("protect-portcullises")) {
+            if (startEvent.getToggleType().equals(DoorEventToggle.ToggleType.CLOSE)) {
+                if (startEvent.getDoor().getType().equals(DoorType.PORTCULLIS)) {
+                    Location size = startEvent.getDoor().getMaximum().subtract(startEvent.getDoor().getMinimum());
+                    if (Math.abs(size.getBlockX()) == 0 || Math.abs(size.getBlockZ()) == 0)
+                        return;
+                }
+            }
+        }
         BLOCK_MOVERS.put(startEvent.getDoor().getDoorUID(), BigDoors.get().getCommander().getBlockMover(startEvent.getDoor().getDoorUID()));
     }
 
     @EventHandler
     public void onBigDoorsToggleEnd(@NotNull DoorEventToggleEnd endEvent) {
         if (endEvent.instantOpen()) return;
+        if (CONFIG.getBoolean("protect-portcullises")) {
+            if (endEvent.getToggleType().equals(DoorEventToggle.ToggleType.CLOSE)) {
+                if (endEvent.getDoor().getType().equals(DoorType.PORTCULLIS)) {
+                    Location size = endEvent.getDoor().getMaximum().subtract(endEvent.getDoor().getMinimum());
+                    if (Math.abs(size.getBlockX()) == 0 || Math.abs(size.getBlockZ()) == 0)
+                        return;
+                }
+            }
+        }
         for (ColliderBlock block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
             block.remove();
         }
