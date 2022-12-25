@@ -1,5 +1,7 @@
 package net.bonn2.bigdoorsphysics;
 
+import net.bonn2.bigdoorsphysics.barriermethod.ColliderBlock;
+import net.bonn2.bigdoorsphysics.barriermethod.BarrierListener;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,7 +14,7 @@ public final class BigDoorsPhysics extends JavaPlugin {
     public static BigDoorsPhysics PLUGIN;
     public static YamlConfiguration CONFIG = new YamlConfiguration();
 
-    private PhysicsListener physicsListener;
+    private BarrierListener physicsListener;
 
     @Override
     public void onEnable() {
@@ -61,7 +63,7 @@ public final class BigDoorsPhysics extends JavaPlugin {
 
         // Register Events
         getLogger().info("Registering Events");
-        physicsListener = new PhysicsListener();
+        physicsListener = new BarrierListener();
         getServer().getPluginManager().registerEvents(physicsListener, this);
     }
 

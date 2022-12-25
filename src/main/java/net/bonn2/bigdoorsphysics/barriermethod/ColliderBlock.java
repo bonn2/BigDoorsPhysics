@@ -1,4 +1,4 @@
-package net.bonn2.bigdoorsphysics;
+package net.bonn2.bigdoorsphysics.barriermethod;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

@@ -1,4 +1,4 @@
-package net.bonn2.bigdoorsphysics;
+package net.bonn2.bigdoorsphysics.barriermethod;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import nl.pim16aap2.bigDoors.BigDoors;
@@ -21,9 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
-import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
-public class PhysicsListener implements Listener {
+public class BarrierListener implements Listener {
 
     private final Map<Long, BlockMover> BLOCK_MOVERS = new HashMap<>();
     private final Map<Long, List<ColliderBlock>> COLLIDERS = new HashMap<>();
