@@ -2,18 +2,20 @@
 
 This plugin aims to add collisions to the spigot plugin [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) through several methods.
 
-## Minecraft Version
-Built and tested on [PaperMC](https://papermc.io) 1.19, may work on older versions but also may not
+## Requirements
+- Paper >= 1.19
+- BigDoors >= b1118
 
 ## The methods
 - Shulkers
     - Allows off grid collisions
     - Requires 2 entities per door block
+    - Shulker heads may sometimes be visible without client side mode
 - Barriers
     - Locked to minecraft grid
     - More solid
-
-
+    - Completely invisible
+    - No extra entities
  
  ## How to build
  1. Pull the project
@@ -21,4 +23,3 @@ Built and tested on [PaperMC](https://papermc.io) 1.19, may work on older versio
  3. Add the latest release of [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) to the newly created folder
  4. Run `gradlew build`
  5. Plugin will be placed in `~/build/libs`
- 
