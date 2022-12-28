@@ -38,14 +38,16 @@ public class ShulkerListener implements Listener {
         if (!Objects.requireNonNull(CONFIG.getString("method")).equalsIgnoreCase("SHULKER")) return;
         if (endEvent.instantOpen()) return;
 
-        for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
-            for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
-                if (player.getBoundingBox().overlaps(block.getBoundingBox().clone().shift(new Vector(0, 0.1, 0)))
-                && player.getLocation().getY() > block.getBoundingBox().getCenterY()) {
-                    player.teleport(player.getLocation().add(
-                            0,
-                            player.getLocation().getY() - block.getBoundingBox().getCenterY() + 0.05,
-                            0));
+        if (CONFIG.getBoolean("move-with-shulker")) {
+            for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
+                for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
+                    if (player.getBoundingBox().overlaps(block.getBoundingBox().clone().shift(new Vector(0, 0.1, 0)))
+                            && player.getLocation().getY() > block.getBoundingBox().getCenterY()) {
+                        player.teleport(player.getLocation().add(
+                                0,
+                                player.getLocation().getY() - block.getBoundingBox().getCenterY() + 0.05,
+                                0));
+                    }
                 }
             }
         }

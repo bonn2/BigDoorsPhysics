@@ -41,6 +41,21 @@ public final class BigDoorsPhysics extends JavaPlugin {
                                     # Any invalid selection will just disable collisions
                                     method: SHULKER
                                     
+                                    ### Shulker Options
+                                    
+                                    # Make the player move with the shulker, this only has an effect when the shulker and player clip into one another.
+                                    # It will not have an effect when the shulker and player are not clipped into each other
+                                    # Potential tps impact on larger player and door counts
+                                    move-with-shulker: true
+                                    
+                                    # Verify that the player is not clipping into the door when it finishes moving
+                                    # If a player is standing on top of a door when it finishes moving they will be
+                                    # teleported up a small amount to prevent them from falling through the door
+                                    # This should have a minimal performance impact
+                                    correct-ending-clipping: true
+                                    
+                                    ### Barrier Options
+                                    
                                     # Use extra packets to hide barriers when they are far away
                                     # This may have a medium performance impact, primarily fps
                                     hide-barriers: true
@@ -56,7 +71,7 @@ public final class BigDoorsPhysics extends JavaPlugin {
                                     protect-portcullises: true
                                     
                                     # DO NOT TOUCH
-                                    config-version: 1
+                                    config-version: 2
                                     """.getBytes(StandardCharsets.UTF_8)
                     );
                 }
