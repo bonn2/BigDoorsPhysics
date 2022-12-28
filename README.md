@@ -1,17 +1,19 @@
 # BigDoorsPhysics
 
-This plugin aims to add collions to the spigot plugin [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) through several methods.
+This plugin aims to add collisions to the spigot plugin [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) through several methods.
 
 ## Minecraft Version
 Built and tested on [PaperMC](https://papermc.io) 1.19, may work on older versions but also may not
 
 ## The methods
+- Shulkers
+    - Allows off grid collisions
+    - Requires 2 entities per door block
 - Barriers
-  - Locked to minecraft grid
-  - Very solid
-- Shulkers (not implemented)
-  - Allows off grid collisions
-  - More glitchy
+    - Locked to minecraft grid
+    - More solid
+
+
  
  ## How to build
  1. Pull the project
