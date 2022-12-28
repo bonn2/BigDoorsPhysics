@@ -10,7 +10,7 @@ This plugin aims to add collisions to the spigot plugin [BigDoors](https://www.s
 - Shulkers (Recommended)
     - Allows off grid collisions
     - Requires 2 entities per door block
-    - Shulker heads may sometimes be visible without client side mode
+    - Shulker heads may sometimes be visible without client side mod
 - Barriers
     - Locked to minecraft grid
     - More solid
