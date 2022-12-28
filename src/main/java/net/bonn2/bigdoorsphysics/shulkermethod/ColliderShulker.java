@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
 public class ColliderShulker {
-    private static final double SHULKER_OFFSET = 0.72;
+    private static final double SHULKER_OFFSET = 0.74063;
 
-    private Location spawnLocation;
+    private final Location spawnLocation;
     private Shulker shulker;
     private ArmorStand armorStand;
 
