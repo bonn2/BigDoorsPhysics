@@ -3,8 +3,8 @@
 This plugin aims to add collisions to the spigot plugin [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) through several methods.
 
 ## Requirements
-- Paper >= 1.19
-- BigDoors >= 0.1.8.42 (Currently only avalible as a dev build [on pim16aap2's official site](https://pim16aap2.nl/BigDoors/))
+- [Paper](https://papermc.io/) >= 1.19
+- [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) >= 0.1.8.42 (Currently only avalible as a dev build [on pim16aap2's official site](https://pim16aap2.nl/BigDoors/))
 
 ## The methods
 - Shulkers (Recommended)
