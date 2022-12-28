@@ -37,7 +37,7 @@ public class ColliderBlock {
         }
         if (Objects.equals(direction, new Location(location.getWorld(), 0, 0, 0))) return;
         // Handle clipping players
-        for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
+        for (Player player : location.getWorld().getPlayers()) {
             if (new BoundingBox(
                     location.getBlockX(),
                     location.getBlockY(),

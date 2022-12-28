@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
-import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
 public class ColliderShulker {
     private static final double SHULKER_OFFSET = 0.74063;
@@ -67,7 +66,7 @@ public class ColliderShulker {
         armorStand.teleport(location.clone().subtract(0, SHULKER_OFFSET, 0), true);
 
         if (CONFIG.getBoolean("move-with-shulker")) {
-            for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
+            for (Player player : location.getWorld().getPlayers()) {
                 if (player.getBoundingBox().overlaps(shulker.getBoundingBox())) {
                     if (!movedPlayers.contains(player.getUniqueId()) && player.getLocation().getY() > newLocation.getY() + 0.5) {
                         player.teleport(player.getLocation().add(0, 0.5, 0));
