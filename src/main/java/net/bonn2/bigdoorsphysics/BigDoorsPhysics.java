@@ -2,19 +2,23 @@ package net.bonn2.bigdoorsphysics;
 
 import net.bonn2.bigdoorsphysics.barriermethod.ColliderBlock;
 import net.bonn2.bigdoorsphysics.barriermethod.BarrierListener;
+import net.bonn2.bigdoorsphysics.shulkermethod.ColliderShulker;
+import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerListener;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public final class BigDoorsPhysics extends JavaPlugin {
 
     public static BigDoorsPhysics PLUGIN;
     public static YamlConfiguration CONFIG = new YamlConfiguration();
 
-    private BarrierListener physicsListener;
+    private BarrierListener barrierListener;
+    private ShulkerListener shulkerListener;
 
     @Override
     public void onEnable() {
@@ -31,6 +35,11 @@ public final class BigDoorsPhysics extends JavaPlugin {
                     output.write(
                                     """
                                     ### BigDoorsPhysics Config
+                                    
+                                    # How the plugin should create the colliders
+                                    # Valid options: BARRIER, SHULKER
+                                    # Any invalid selection will just disable collisions
+                                    method: SHULKER
                                     
                                     # Use extra packets to hide barriers when they are far away
                                     # This may have a medium performance impact, primarily fps
@@ -63,17 +72,34 @@ public final class BigDoorsPhysics extends JavaPlugin {
 
         // Register Events
         getLogger().info("Registering Events");
-        physicsListener = new BarrierListener();
-        getServer().getPluginManager().registerEvents(physicsListener, this);
+        switch (Objects.requireNonNull(CONFIG.getString("method"))) {
+            case "BARRIER" -> {
+                barrierListener = new BarrierListener();
+                getServer().getPluginManager().registerEvents(barrierListener, this);
+            }
+            case "SHULKER" -> {
+                shulkerListener = new ShulkerListener();
+                getServer().getPluginManager().registerEvents(shulkerListener, this);
+            }
+        }
     }
 
     @Override
     public void onDisable() {
         // Remove old barrier blocks
         getLogger().info("Removing leftover colliders");
-        for (Long id : physicsListener.getColliders().keySet()) {
-            for (ColliderBlock colliderBlock : physicsListener.getColliders().get(id)) {
-                colliderBlock.remove();
+        if (barrierListener != null) {
+            for (Long id : barrierListener.getColliders().keySet()) {
+                for (ColliderBlock colliderBlock : barrierListener.getColliders().get(id)) {
+                    colliderBlock.remove();
+                }
+            }
+        }
+        if (shulkerListener != null) {
+            for (Long id : shulkerListener.getColliders().keySet()) {
+                for (ColliderShulker colliderShulker : shulkerListener.getColliders().get(id)) {
+                    colliderShulker.remove();
+                }
             }
         }
     }
