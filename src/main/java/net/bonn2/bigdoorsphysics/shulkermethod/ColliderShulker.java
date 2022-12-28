@@ -2,9 +2,7 @@ package net.bonn2.bigdoorsphysics.shulkermethod;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
+import org.bukkit.entity.*;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +20,7 @@ public class ColliderShulker {
     private Shulker shulker;
     private ArmorStand armorStand;
 
-    private final List<UUID> movedPlayers = new ArrayList<>();
+    private final List<UUID> movedEntities = new ArrayList<>();
 
     public ColliderShulker(Location spawnLocation) {
         this.spawnLocation = spawnLocation;
@@ -30,6 +28,10 @@ public class ColliderShulker {
 
     public BoundingBox getBoundingBox() {
         return shulker.getBoundingBox();
+    }
+
+    public Location getLocation() {
+        return shulker.getLocation();
     }
 
     public void place() {
@@ -65,15 +67,33 @@ public class ColliderShulker {
 
         armorStand.teleport(location.clone().subtract(0, SHULKER_OFFSET, 0), true);
 
-        if (CONFIG.getBoolean("move-with-shulker")) {
+        if (CONFIG.getBoolean("move-player-with-shulker")) {
             for (Player player : location.getWorld().getPlayers()) {
                 if (player.getBoundingBox().overlaps(shulker.getBoundingBox())) {
-                    if (!movedPlayers.contains(player.getUniqueId()) && player.getLocation().getY() > newLocation.getY() + 0.5) {
+                    if (!movedEntities.contains(player.getUniqueId()) && player.getLocation().getY() > newLocation.getY() + 0.5) {
                         player.teleport(player.getLocation().add(0, 0.5, 0));
-                        movedPlayers.add(player.getUniqueId());
+                        movedEntities.add(player.getUniqueId());
                     } else {
                         player.setVelocity(velocity.multiply(1.5));
-                        if (!movedPlayers.contains(player.getUniqueId())) movedPlayers.add(player.getUniqueId());
+                        if (!movedEntities.contains(player.getUniqueId())) movedEntities.add(player.getUniqueId());
+                    }
+                }
+            }
+        }
+
+        if (CONFIG.getBoolean("move-entity-with-shulker")) {
+            for (Entity entity : location.getNearbyEntities(3, 3, 3)) {
+                if (entity instanceof Player
+                        || entity instanceof FallingBlock
+                        || entity.name().equals(Component.text("BigDoorsPhysicsS"))
+                        || entity.name().equals(Component.text("BigDoorsPhysicsAS"))) continue;
+                if (entity.getBoundingBox().overlaps(shulker.getBoundingBox())) {
+                    if (!movedEntities.contains(entity.getUniqueId()) && entity.getLocation().getY() > newLocation.getY() + 0.5) {
+                        entity.teleport(entity.getLocation().add(0, 0.5, 0));
+                        movedEntities.add(entity.getUniqueId());
+                    } else {
+                        entity.setVelocity(velocity.multiply(1.5));
+                        if (!movedEntities.contains(entity.getUniqueId())) movedEntities.add(entity.getUniqueId());
                     }
                 }
             }

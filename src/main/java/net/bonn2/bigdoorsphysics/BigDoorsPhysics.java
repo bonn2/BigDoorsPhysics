@@ -54,11 +54,17 @@ public final class BigDoorsPhysics extends JavaPlugin {
                                     # Make the player move with the shulker, this only has an effect when the shulker and player clip into one another.
                                     # It will not have an effect when the shulker and player are not clipped into each other
                                     # Potential tps impact on larger player and door counts
-                                    move-with-shulker: true
+                                    move-player-with-shulker: true
                                     
-                                    # Verify that the player is not clipping into the door when it finishes moving
-                                    # If a player is standing on top of a door when it finishes moving they will be
+                                    # Make all non-player entities move with the shulker, this only has an effect when the shulker and entity clip into one another.
+                                    # It will not have an effect when the shulker and entity are not clipped into each other
+                                    # Larger performance impact than with players, due to the usually larger amount of entities on a server
+                                    move-entity-with-shulker: true
+                                    
+                                    # Verify that the moved entity is not clipping into the door when it finishes moving
+                                    # If a entity is standing on top of a door when it finishes moving they will be
                                     # teleported up a small amount to prevent them from falling through the door
+                                    # This will only apply to entities / players if they are enabled above
                                     # This should have a minimal performance impact
                                     correct-ending-clipping: true
                                     
@@ -79,7 +85,7 @@ public final class BigDoorsPhysics extends JavaPlugin {
                                     protect-portcullises: true
                                     
                                     # DO NOT TOUCH
-                                    config-version: 2
+                                    config-version: 3
                                     """.getBytes(StandardCharsets.UTF_8)
                     );
                 }
