@@ -6,14 +6,17 @@ import nl.pim16aap2.bigDoors.events.DoorEventToggleEnd;
 import nl.pim16aap2.bigDoors.events.DoorEventToggleStart;
 import nl.pim16aap2.bigDoors.moveBlocks.BlockMover;
 import nl.pim16aap2.bigDoors.util.MyBlockData;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
+import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
 public class ShulkerListener implements Listener {
 
@@ -34,6 +37,19 @@ public class ShulkerListener implements Listener {
     public void onBigDoorsToggleEnd(@NotNull DoorEventToggleEnd endEvent) {
         if (!Objects.requireNonNull(CONFIG.getString("method")).equalsIgnoreCase("SHULKER")) return;
         if (endEvent.instantOpen()) return;
+
+        for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
+            for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
+                if (player.getBoundingBox().overlaps(block.getBoundingBox().clone().shift(new Vector(0, 0.1, 0)))
+                && player.getLocation().getY() > block.getBoundingBox().getCenterY()) {
+                    player.teleport(player.getLocation().add(
+                            0,
+                            player.getLocation().getY() - block.getBoundingBox().getCenterY() + 0.05,
+                            0));
+                }
+            }
+        }
+
         for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
             block.remove();
         }

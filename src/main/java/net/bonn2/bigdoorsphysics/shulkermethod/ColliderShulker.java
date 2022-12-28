@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +26,10 @@ public class ColliderShulker {
 
     public ColliderShulker(Location spawnLocation) {
         this.spawnLocation = spawnLocation;
+    }
+
+    public BoundingBox getBoundingBox() {
+        return shulker.getBoundingBox();
     }
 
     public void place() {
