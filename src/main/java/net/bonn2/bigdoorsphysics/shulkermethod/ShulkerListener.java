@@ -12,7 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
@@ -63,29 +62,23 @@ public class ShulkerListener implements Listener {
     public void updateCollisions(ServerTickEndEvent tickEndEvent) {
         if (!Objects.requireNonNull(CONFIG.getString("method")).equalsIgnoreCase("SHULKER")) return;
         for (long id : BLOCK_MOVERS.keySet()) {
-            List<MyBlockData> doorBlocks;
-            try {
-                Field SavedBlocks = BlockMover.class.getDeclaredField("savedBlocks");
-                SavedBlocks.setAccessible(true);
-                // Get private variable of MyBlockData List
-                doorBlocks = (List<MyBlockData>) SavedBlocks.get(BLOCK_MOVERS.get(id));
-                if (doorBlocks.size() == 0) continue;
-                if (COLLIDERS.containsKey(id)) {
-                    for (int i = 0; i < doorBlocks.size(); i++) {
-                        COLLIDERS.get(id).get(i).move(doorBlocks.get(i).getFBlock().getLocation(), doorBlocks.get(i).getFBlock().getVelocity());
-                    }
+            // Get saved blocks
+            List<MyBlockData> doorBlocks = BLOCK_MOVERS.get(id).getSavedBlocks();
+            if (doorBlocks.size() == 0) continue;
+            // Update shulker locations
+            if (COLLIDERS.containsKey(id)) {
+                for (int i = 0; i < doorBlocks.size(); i++) {
+                    COLLIDERS.get(id).get(i).move(doorBlocks.get(i).getFBlock().getLocation(), doorBlocks.get(i).getFBlock().getVelocity());
                 }
-                else {
-                    List<ColliderShulker> shulkers = new ArrayList<>(doorBlocks.size());
-                    for (MyBlockData doorBlock : doorBlocks) {
-                        shulkers.add(new ColliderShulker(doorBlock.getFBlock().getLocation()));
-                        COLLIDERS.put(id, shulkers);
-                    }
-                    COLLIDERS.get(id).forEach(ColliderShulker::place);
+            }
+            // Spawn shulkers
+            else {
+                List<ColliderShulker> shulkers = new ArrayList<>(doorBlocks.size());
+                for (MyBlockData doorBlock : doorBlocks) {
+                    shulkers.add(new ColliderShulker(doorBlock.getFBlock().getLocation()));
+                    COLLIDERS.put(id, shulkers);
                 }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
-                return;
+                COLLIDERS.get(id).forEach(ColliderShulker::place);
             }
         }
     }

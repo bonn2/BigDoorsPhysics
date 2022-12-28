@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,58 +66,52 @@ public class BarrierListener implements Listener {
     @EventHandler
     public void updateCollisions(ServerTickEndEvent tickEndEvent) {
         for (long id : BLOCK_MOVERS.keySet()) {
-            List<MyBlockData> doorBlocks;
-            try {
-                Field SavedBlocks = BlockMover.class.getDeclaredField("savedBlocks");
-                SavedBlocks.setAccessible(true);
-                // Get private variable of MyBlockData List
-                doorBlocks = (List<MyBlockData>) SavedBlocks.get(BLOCK_MOVERS.get(id));
-                if (doorBlocks.size() == 0) continue;
-                if (COLLIDERS.containsKey(id)) {
-                    List<ColliderBlock> oldBlocks = COLLIDERS.get(id);
-                    List<ColliderBlock> blocks = new ArrayList<>(doorBlocks.size());
-                    for (MyBlockData doorBlock : doorBlocks) {
-                        Location direction = new Location(doorBlock.getFBlock().getLocation().getWorld(), 0, 0, 0);
-                        // Only calculate direction if players should be moved
-                        if (CONFIG.getBoolean("move-players")) {
-                            Vector velocity = doorBlock.getFBlock().getVelocity();
-                            if (velocity.getX() > 0)
-                                direction = direction.add(1,0,0);
-                            if (velocity.getX() < 0)
-                                direction = direction.add(-1, 0, 0);
-                            if (velocity.getY() > 0)
-                                direction = direction.add(0, 1, 0);
-                            if (velocity.getY() < 0)
-                                direction = direction.add(0, -1, 0);
-                            if (velocity.getZ() > 0)
-                                direction = direction.add(0, 0, 1);
-                            if (velocity.getZ() < 0)
-                                direction = direction.add(0, 0, -1);
-                        }
-                        blocks.add(new ColliderBlock(
-                                    doorBlock.getFBlock().getLocation().add(0, 0.1, 0).toCenterLocation(),
-                                    direction
-                                ));
-                        COLLIDERS.put(id, blocks);
+            // Get saved blocks
+            List<MyBlockData> doorBlocks = BLOCK_MOVERS.get(id).getSavedBlocks();
+            if (doorBlocks.size() == 0) continue;
+            // Move barrier blocks
+            if (COLLIDERS.containsKey(id)) {
+                List<ColliderBlock> oldBlocks = COLLIDERS.get(id);
+                List<ColliderBlock> blocks = new ArrayList<>(doorBlocks.size());
+                for (MyBlockData doorBlock : doorBlocks) {
+                    Location direction = new Location(doorBlock.getFBlock().getLocation().getWorld(), 0, 0, 0);
+                    // Only calculate direction if players should be moved
+                    if (CONFIG.getBoolean("move-players")) {
+                        Vector velocity = doorBlock.getFBlock().getVelocity();
+                        if (velocity.getX() > 0)
+                            direction = direction.add(1,0,0);
+                        if (velocity.getX() < 0)
+                            direction = direction.add(-1, 0, 0);
+                        if (velocity.getY() > 0)
+                            direction = direction.add(0, 1, 0);
+                        if (velocity.getY() < 0)
+                            direction = direction.add(0, -1, 0);
+                        if (velocity.getZ() > 0)
+                            direction = direction.add(0, 0, 1);
+                        if (velocity.getZ() < 0)
+                            direction = direction.add(0, 0, -1);
                     }
-                    for (ColliderBlock oldBlock : oldBlocks)
-                        oldBlock.remove();
-                    COLLIDERS.get(id).forEach(ColliderBlock::place);
+                    blocks.add(new ColliderBlock(
+                                doorBlock.getFBlock().getLocation().add(0, 0.1, 0).toCenterLocation(),
+                                direction
+                            ));
+                    COLLIDERS.put(id, blocks);
                 }
-                else {
-                    List<ColliderBlock> blocks = new ArrayList<>(doorBlocks.size());
-                    for (MyBlockData doorBlock : doorBlocks) {
-                        blocks.add(new ColliderBlock(
-                                doorBlock.getFBlock().getLocation().add(0, 0.1, 0).toBlockLocation(),
-                                new Location(doorBlock.getFBlock().getLocation().getWorld(), 0, 0, 0)
-                        ));
-                        COLLIDERS.put(id, blocks);
-                    }
-                    COLLIDERS.get(id).forEach(ColliderBlock::place);
+                for (ColliderBlock oldBlock : oldBlocks)
+                    oldBlock.remove();
+                COLLIDERS.get(id).forEach(ColliderBlock::place);
+            }
+            // Place initial barrier blocks
+            else {
+                List<ColliderBlock> blocks = new ArrayList<>(doorBlocks.size());
+                for (MyBlockData doorBlock : doorBlocks) {
+                    blocks.add(new ColliderBlock(
+                            doorBlock.getFBlock().getLocation().add(0, 0.1, 0).toBlockLocation(),
+                            new Location(doorBlock.getFBlock().getLocation().getWorld(), 0, 0, 0)
+                    ));
+                    COLLIDERS.put(id, blocks);
                 }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
-                return;
+                COLLIDERS.get(id).forEach(ColliderBlock::place);
             }
         }
     }

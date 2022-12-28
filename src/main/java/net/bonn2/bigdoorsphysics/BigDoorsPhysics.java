@@ -4,6 +4,7 @@ import net.bonn2.bigdoorsphysics.barriermethod.ColliderBlock;
 import net.bonn2.bigdoorsphysics.barriermethod.BarrierListener;
 import net.bonn2.bigdoorsphysics.shulkermethod.ColliderShulker;
 import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerListener;
+import nl.pim16aap2.bigDoors.BigDoors;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,6 +25,13 @@ public final class BigDoorsPhysics extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         PLUGIN = this;
+
+        // Check if installed BigDoors version supports BlockMover#getSavedBlocks()
+        if (BigDoors.get().getBuild() < 1118) {
+            getLogger().severe("BigDoors version is too old! Please update before using!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         getLogger().info("Loading Config");
         // Load config
