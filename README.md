@@ -4,10 +4,10 @@ This plugin aims to add collisions to the spigot plugin [BigDoors](https://www.s
 
 ## Requirements
 - Paper >= 1.19
-- BigDoors >= b1118
+- BigDoors >= 0.1.8.42 (Currently only avalible as a dev build [on pim16aap2's official site](https://pim16aap2.nl/BigDoors/))
 
 ## The methods
-- Shulkers
+- Shulkers (Recommended)
     - Allows off grid collisions
     - Requires 2 entities per door block
     - Shulker heads may sometimes be visible without client side mode
