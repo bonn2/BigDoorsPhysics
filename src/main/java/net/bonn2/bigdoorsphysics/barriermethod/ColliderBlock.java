@@ -45,11 +45,7 @@ public class ColliderBlock {
                     location.getBlockX() + 1,
                     location.getBlockY() + 1,
                     location.getBlockZ() + 1
-            ).contains(
-                    player.getLocation().getX(),
-                    player.getLocation().getY(),
-                    player.getLocation().getZ()
-            )
+            ).overlaps(player.getBoundingBox())
             && !location.getWorld().getType(location.add(direction)).isCollidable()) {
                 player.teleport(player.getLocation().add(direction));
             }
