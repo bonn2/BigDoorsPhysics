@@ -8,6 +8,10 @@ import org.bukkit.entity.Shulker;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
 public class ColliderShulker {
@@ -16,6 +20,8 @@ public class ColliderShulker {
     private final Location spawnLocation;
     private Shulker shulker;
     private ArmorStand armorStand;
+
+    private final List<UUID> movedPlayers = new ArrayList<>();
 
     public ColliderShulker(Location spawnLocation) {
         this.spawnLocation = spawnLocation;
@@ -56,11 +62,13 @@ public class ColliderShulker {
 
         for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
             if (player.getBoundingBox().overlaps(shulker.getBoundingBox())) {
-                player.teleport(player.getLocation().clone().add(
-                        velocity.getX(),
-                        velocity.getY(),
-                        velocity.getZ()
-                ));
+                if (!movedPlayers.contains(player.getUniqueId()) && player.getLocation().getY() > newLocation.getY() + 0.5) {
+                    player.teleport(player.getLocation().add(0, 0.5, 0));
+                    movedPlayers.add(player.getUniqueId());
+                } else {
+                    player.setVelocity(velocity.multiply(1.5));
+                    if (!movedPlayers.contains(player.getUniqueId())) movedPlayers.add(player.getUniqueId());
+                }
             }
         }
     }
