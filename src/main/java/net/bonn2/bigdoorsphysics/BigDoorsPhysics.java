@@ -35,9 +35,6 @@ public final class BigDoorsPhysics extends JavaPlugin {
             return;
         }
 
-        // Enable metrics
-        new Metrics(this, 17236);
-
         getLogger().info("Loading Config");
         // Load config
         File configFile = new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml");
@@ -104,16 +101,21 @@ public final class BigDoorsPhysics extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
+        // Enable metrics
+        Metrics metrics = new Metrics(this, 17236);
+
         // Register Events
         getLogger().info("Registering Events");
         switch (Objects.requireNonNull(CONFIG.getString("method"))) {
             case "BARRIER" -> {
                 barrierListener = new BarrierListener();
                 getServer().getPluginManager().registerEvents(barrierListener, this);
+                metrics.addCustomChart(new Metrics.SimplePie("collision_method", () -> "Barrier"));
             }
             case "SHULKER" -> {
                 shulkerListener = new ShulkerListener();
                 getServer().getPluginManager().registerEvents(shulkerListener, this);
+                metrics.addCustomChart(new Metrics.SimplePie("collision_method", () -> "Shulker"));
             }
         }
 
