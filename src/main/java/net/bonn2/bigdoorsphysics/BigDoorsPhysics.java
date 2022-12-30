@@ -2,6 +2,7 @@ package net.bonn2.bigdoorsphysics;
 
 import net.bonn2.bigdoorsphysics.barriermethod.ColliderBlock;
 import net.bonn2.bigdoorsphysics.barriermethod.BarrierListener;
+import net.bonn2.bigdoorsphysics.bstats.Metrics;
 import net.bonn2.bigdoorsphysics.shulkermethod.ColliderShulker;
 import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerListener;
 import nl.pim16aap2.bigDoors.BigDoors;
@@ -32,6 +33,9 @@ public final class BigDoorsPhysics extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        // Enable metrics
+        new Metrics(this, 17236);
 
         getLogger().info("Loading Config");
         // Load config
