@@ -6,7 +6,6 @@ group = 'net.bonn2'
 version = '2.1.1'
 
 repositories {
-    mavenCentral()
     maven {
         name = 'papermc-repo'
         url = 'https://repo.papermc.io/repository/maven-public/'
@@ -15,11 +14,15 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven {
+        name = 'eldonexus'
+        url = 'https://eldonexus.de/repository/maven-public/'
+    }
 }
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
-    compileOnly fileTree(dir: 'libs', include: '*.jar')
+    compileOnly 'nl.pim16aap2:BigDoors:0.1.8.42'
 }
 
 def targetJavaVersion = 17
