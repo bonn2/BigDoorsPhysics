@@ -1,6 +1,7 @@
 package net.bonn2.bigdoorsphysics.shulkermethod;
 
 import net.kyori.adventure.text.Component;
+import nl.pim16aap2.bigDoors.reflection.BukkitReflectionUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.util.BoundingBox;
@@ -70,6 +71,7 @@ public class ColliderShulker {
         if (CONFIG.getBoolean("move-player-with-shulker")) {
             for (Player player : location.getWorld().getPlayers()) {
                 if (player.getBoundingBox().overlaps(shulker.getBoundingBox())) {
+                    BukkitReflectionUtil.resetFlyingCounters(player);
                     if (!movedEntities.contains(player.getUniqueId()) && player.getLocation().getY() > newLocation.getY() + 0.5) {
                         player.teleport(player.getLocation().add(0, 0.5, 0));
                         movedEntities.add(player.getUniqueId());
