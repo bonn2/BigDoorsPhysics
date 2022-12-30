@@ -40,43 +40,44 @@ public class ShulkerListener implements Listener {
         if (!Objects.requireNonNull(CONFIG.getString("method")).equalsIgnoreCase("SHULKER")) return;
         if (endEvent.instantOpen()) return;
 
-        if (CONFIG.getBoolean("move-player-with-shulker") && CONFIG.getBoolean("correct-ending-clipping")) {
-            for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
-                for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
-                    if (player.getBoundingBox().overlaps(block.getBoundingBox().clone().shift(new Vector(0, 0.1, 0)))
-                            && player.getLocation().getY() > block.getBoundingBox().getCenterY()) {
-                        player.teleport(player.getLocation().add(
-                                0,
-                                player.getLocation().getY() - block.getBoundingBox().getCenterY() + 0.05,
-                                0));
-                    }
-                }
-            }
-        }
-
-        if (CONFIG.getBoolean("move-entity-with-shulker") && CONFIG.getBoolean("correct-ending-clipping")) {
-            for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
-                for (Entity entity : block.getLocation().getNearbyEntities(2, 2, 2)) {
-                    if (entity instanceof Player
-                            || entity instanceof FallingBlock
-                            || entity.name().equals(Component.text("BigDoorsPhysicsS"))
-                            || entity.name().equals(Component.text("BigDoorsPhysicsAS"))) continue;
-                    if (entity.getBoundingBox().overlaps(block.getBoundingBox().clone().shift(new Vector(0, 0.1, 0)))
-                            && entity.getLocation().getY() > block.getBoundingBox().getCenterY()) {
-                        entity.teleport(entity.getLocation().add(
-                                0,
-                                entity.getLocation().getY() - block.getBoundingBox().getCenterY() + 0.05,
-                                0));
-                    }
-                }
-            }
-        }
-
         if (COLLIDERS.containsKey(endEvent.getDoor().getDoorUID())) {
+            if (CONFIG.getBoolean("move-player-with-shulker") && CONFIG.getBoolean("correct-ending-clipping")) {
+                for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
+                    for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
+                        if (player.getBoundingBox().overlaps(block.getBoundingBox().clone().shift(new Vector(0, 0.1, 0)))
+                                && player.getLocation().getY() > block.getBoundingBox().getCenterY()) {
+                            player.teleport(player.getLocation().add(
+                                    0,
+                                    player.getLocation().getY() - block.getBoundingBox().getCenterY() + 0.05,
+                                    0));
+                        }
+                    }
+                }
+            }
+
+            if (CONFIG.getBoolean("move-entity-with-shulker") && CONFIG.getBoolean("correct-ending-clipping")) {
+                for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
+                    for (Entity entity : block.getLocation().getNearbyEntities(2, 2, 2)) {
+                        if (entity instanceof Player
+                                || entity instanceof FallingBlock
+                                || entity.name().equals(Component.text("BigDoorsPhysicsS"))
+                                || entity.name().equals(Component.text("BigDoorsPhysicsAS"))) continue;
+                        if (entity.getBoundingBox().overlaps(block.getBoundingBox().clone().shift(new Vector(0, 0.1, 0)))
+                                && entity.getLocation().getY() > block.getBoundingBox().getCenterY()) {
+                            entity.teleport(entity.getLocation().add(
+                                    0,
+                                    entity.getLocation().getY() - block.getBoundingBox().getCenterY() + 0.05,
+                                    0));
+                        }
+                    }
+                }
+            }
+
             for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
                 block.remove();
             }
         }
+
         COLLIDERS.remove(endEvent.getDoor().getDoorUID());
         BLOCK_MOVERS.remove(endEvent.getDoor().getDoorUID());
     }
