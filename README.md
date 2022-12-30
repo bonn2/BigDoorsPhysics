@@ -4,8 +4,7 @@ This plugin aims to add collisions to the spigot plugin [BigDoors](https://www.s
 
 ## Requirements
 - [Paper](https://papermc.io/) >= 1.19
-- [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) >= 0.1.8.42 (Currently only avalible as a dev build [on pim16aap2's official site](https://pim16aap2.nl/BigDoors/))
-
+- [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) >= 0.1.8.42
 ## The methods
 - Shulkers (Recommended)
     - Allows off grid collisions
