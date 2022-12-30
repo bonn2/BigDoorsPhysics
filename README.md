@@ -18,7 +18,5 @@ This plugin aims to add collisions to the spigot plugin [BigDoors](https://www.s
  
  ## How to build
  1. Pull the project
- 2. Create the directory `~/libs/` in the project
- 3. Add the latest release of [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) to the newly created folder
- 4. Run `gradlew build`
- 5. Plugin will be placed in `~/build/libs`
+ 2. Run `gradlew build`
+ 3. Plugin will be placed in `~/build/libs`
