@@ -72,8 +72,10 @@ public class ShulkerListener implements Listener {
             }
         }
 
-        for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
-            block.remove();
+        if (COLLIDERS.containsKey(endEvent.getDoor().getDoorUID())) {
+            for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
+                block.remove();
+            }
         }
         COLLIDERS.remove(endEvent.getDoor().getDoorUID());
         BLOCK_MOVERS.remove(endEvent.getDoor().getDoorUID());
