@@ -1,7 +1,7 @@
 name: BigDoorsPhysics
 version: '${version}'
 main: net.bonn2.bigdoorsphysics.BigDoorsPhysics
-api-version: 1.19
+api-version: 1.17
 depend: [ BigDoors ]
 authors: [ bonn2 ]
 description: Using every trick in the book
