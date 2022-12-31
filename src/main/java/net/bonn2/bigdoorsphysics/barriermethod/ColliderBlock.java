@@ -25,7 +25,7 @@ public class ColliderBlock {
     }
 
     public void place() {
-        location.getWorld().setBlockData(location, Material.BARRIER.createBlockData());
+        location.getWorld().getBlockAt(location).setBlockData(Material.BARRIER.createBlockData());
         if (CONFIG.getBoolean("hide-barriers")) {
             // Hide block from distant players
             for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
@@ -46,7 +46,7 @@ public class ColliderBlock {
                     location.getBlockY() + 1,
                     location.getBlockZ() + 1
             ).overlaps(player.getBoundingBox())
-            && !location.getWorld().getType(location.add(direction)).isCollidable()) {
+            && !location.getWorld().getBlockAt(location.add(direction)).getType().isAir()) {
                 player.teleport(player.getLocation().add(direction));
             }
         }
@@ -54,6 +54,6 @@ public class ColliderBlock {
 
     public void remove() {
         if (location.getBlock().getType() == Material.BARRIER)
-            location.getWorld().setBlockData(location, Material.AIR.createBlockData());
+            location.getWorld().getBlockAt(location).setBlockData(Material.AIR.createBlockData());
     }
 }

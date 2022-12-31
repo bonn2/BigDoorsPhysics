@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
@@ -66,7 +67,9 @@ public class ColliderShulker {
         Location newLocation = location.clone().subtract(0, SHULKER_OFFSET, 0);
         if (newLocation == location) return;
 
-        armorStand.teleport(location.clone().subtract(0, SHULKER_OFFSET, 0), true);
+        armorStand.removePassenger(shulker);
+        armorStand.teleport(location.clone().subtract(0, SHULKER_OFFSET, 0));
+        armorStand.addPassenger(shulker);
 
         if (CONFIG.getBoolean("move-player-with-shulker")) {
             for (Player player : location.getWorld().getPlayers()) {
@@ -87,8 +90,8 @@ public class ColliderShulker {
             for (Entity entity : location.getNearbyEntities(3, 3, 3)) {
                 if (entity instanceof Player
                         || entity instanceof FallingBlock
-                        || entity.name().equals(Component.text("BigDoorsPhysicsS"))
-                        || entity.name().equals(Component.text("BigDoorsPhysicsAS"))) continue;
+                        || Objects.equals(entity.getCustomName(), "BigDoorsPhysicsS")
+                        || Objects.equals(entity.getCustomName(), "BigDoorsPhysicsAS")) continue;
                 if (entity.getBoundingBox().overlaps(shulker.getBoundingBox())) {
                     if (!movedEntities.contains(entity.getUniqueId()) && entity.getLocation().getY() > newLocation.getY() + 0.5) {
                         entity.teleport(entity.getLocation().add(0, 0.5, 0));
