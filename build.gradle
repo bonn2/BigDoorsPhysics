@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'net.bonn2'
-version = '2.1.1-BACKPORT'
+version = '2.1.1-PRE-1.19'
 
 repositories {
     maven {
