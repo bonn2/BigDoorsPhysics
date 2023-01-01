@@ -18,11 +18,16 @@ repositories {
         name = 'eldonexus'
         url = 'https://eldonexus.de/repository/maven-public/'
     }
+    maven {
+        name = 'dmulloy2-repo'
+        url = 'https://repo.dmulloy2.net/repository/public/'
+    }
 }
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT'
     compileOnly 'nl.pim16aap2:BigDoors:0.1.8.42'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:4.8.0'
 }
 
 def targetJavaVersion = 17

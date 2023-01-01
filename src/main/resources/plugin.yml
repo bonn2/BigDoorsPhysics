@@ -3,6 +3,7 @@ version: '${version}'
 main: net.bonn2.bigdoorsphysics.BigDoorsPhysics
 api-version: 1.19
 depend: [ BigDoors ]
+softdepend: [ ProtocolLib ]
 authors: [ bonn2 ]
 description: Using every trick in the book
 commands:
