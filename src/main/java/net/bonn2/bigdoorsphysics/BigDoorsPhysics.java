@@ -6,6 +6,7 @@ import net.bonn2.bigdoorsphysics.bstats.Metrics;
 import net.bonn2.bigdoorsphysics.shulkermethod.ColliderShulker;
 import net.bonn2.bigdoorsphysics.shulkermethod.CommandListener;
 import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerListener;
+import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerPacketEditor;
 import nl.pim16aap2.bigDoors.BigDoors;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -122,6 +123,12 @@ public final class BigDoorsPhysics extends JavaPlugin {
         // Register Commands
         getLogger().info("Registering Commands");
         getCommand("killbigdoorsphysicsentities").setExecutor(new CommandListener());
+
+        // Register packet modifier
+        if (getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
+            getLogger().info("Enabling ProtocolLib Support");
+            ShulkerPacketEditor.register();
+        }
     }
 
     @Override

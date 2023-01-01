@@ -15,7 +15,7 @@ import java.util.UUID;
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
 
 public class ColliderShulker {
-    private static final double SHULKER_OFFSET = 0.74063;
+    public static final double SHULKER_OFFSET = 0.74063;
 
     private final Location spawnLocation;
     private Shulker shulker;
