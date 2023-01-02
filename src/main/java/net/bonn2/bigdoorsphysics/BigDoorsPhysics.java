@@ -11,8 +11,6 @@ import net.bonn2.bigdoorsphysics.util.Config;
 import nl.pim16aap2.bigDoors.BigDoors;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Objects;
-
 public final class BigDoorsPhysics extends JavaPlugin {
 
     public static BigDoorsPhysics PLUGIN;
@@ -40,7 +38,7 @@ public final class BigDoorsPhysics extends JavaPlugin {
 
         // Register Events
         getLogger().info("Registering Events");
-        switch (Objects.requireNonNull(Config.getCollisionMethod())) {
+        switch (Config.getCollisionMethod()) {
             case BARRIER -> {
                 barrierListener = new BarrierListener();
                 getServer().getPluginManager().registerEvents(barrierListener, this);
