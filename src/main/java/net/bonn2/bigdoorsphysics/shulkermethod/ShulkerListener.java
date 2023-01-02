@@ -3,7 +3,6 @@ package net.bonn2.bigdoorsphysics.shulkermethod;
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
-import net.kyori.adventure.text.Component;
 import nl.pim16aap2.bigDoors.BigDoors;
 import nl.pim16aap2.bigDoors.events.DoorEventToggleEnd;
 import nl.pim16aap2.bigDoors.events.DoorEventToggleStart;
@@ -61,8 +60,8 @@ public class ShulkerListener implements Listener {
                     for (Entity entity : block.getLocation().getNearbyEntities(2, 2, 2)) {
                         if (entity instanceof Player
                                 || entity instanceof FallingBlock
-                                || entity.name().equals(Component.text("BigDoorsPhysicsS"))
-                                || entity.name().equals(Component.text("BigDoorsPhysicsAS"))) continue;
+                                || Objects.equals(entity.getCustomName(), "BigDoorsPhysicsS")
+                                || Objects.equals(entity.getCustomName(), "BigDoorsPhysicsAS")) continue;
                         if (entity.getBoundingBox().overlaps(block.getBoundingBox().clone().shift(new Vector(0, 0.1, 0)))
                                 && entity.getLocation().getY() > block.getBoundingBox().getCenterY()) {
                             entity.teleport(entity.getLocation().add(

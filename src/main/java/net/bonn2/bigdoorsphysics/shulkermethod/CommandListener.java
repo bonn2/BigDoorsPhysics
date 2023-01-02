@@ -1,6 +1,5 @@
 package net.bonn2.bigdoorsphysics.shulkermethod;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,6 +8,8 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Shulker;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
@@ -34,11 +35,11 @@ public class CommandListener implements CommandExecutor {
         long count = 0;
         for (World world : PLUGIN.getServer().getWorlds()) {
             for (Entity entity : world.getEntities()) {
-                if (entity instanceof Shulker && entity.name().equals(Component.text("BigDoorsPhysicsS"))) {
+                if (entity instanceof Shulker && Objects.equals(entity.getCustomName(), "BigDoorsPhysicsS")) {
                     entity.remove();
                     count++;
                 }
-                if (entity instanceof ArmorStand && entity.name().equals(Component.text("BigDoorsPhysicsAS"))) {
+                if (entity instanceof ArmorStand && Objects.equals(entity.getCustomName(), "BigDoorsPhysicsAS")) {
                     entity.remove();
                     count++;
                 }
