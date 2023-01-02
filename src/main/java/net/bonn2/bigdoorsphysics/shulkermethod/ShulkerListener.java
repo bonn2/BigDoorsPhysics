@@ -1,6 +1,8 @@
 package net.bonn2.bigdoorsphysics.shulkermethod;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
+import net.bonn2.bigdoorsphysics.util.CollisionMethod;
+import net.bonn2.bigdoorsphysics.util.Config;
 import net.kyori.adventure.text.Component;
 import nl.pim16aap2.bigDoors.BigDoors;
 import nl.pim16aap2.bigDoors.events.DoorEventToggleEnd;
@@ -17,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
 public class ShulkerListener implements Listener {
@@ -30,18 +31,18 @@ public class ShulkerListener implements Listener {
     }
     @EventHandler
     public void onBigDoorsToggleStart(@NotNull DoorEventToggleStart startEvent) {
-        if (!Objects.requireNonNull(CONFIG.getString("method")).equalsIgnoreCase("SHULKER")) return;
+        if (!Config.getCollisionMethod().equals(CollisionMethod.SHULKER)) return;
         if (startEvent.instantOpen()) return;
         BLOCK_MOVERS.put(startEvent.getDoor().getDoorUID(), BigDoors.get().getCommander().getBlockMover(startEvent.getDoor().getDoorUID()));
     }
 
     @EventHandler
     public void onBigDoorsToggleEnd(@NotNull DoorEventToggleEnd endEvent) {
-        if (!Objects.requireNonNull(CONFIG.getString("method")).equalsIgnoreCase("SHULKER")) return;
+        if (!Config.getCollisionMethod().equals(CollisionMethod.SHULKER)) return;
         if (endEvent.instantOpen()) return;
 
         if (COLLIDERS.containsKey(endEvent.getDoor().getDoorUID())) {
-            if (CONFIG.getBoolean("move-player-with-shulker") && CONFIG.getBoolean("correct-ending-clipping")) {
+            if (Config.movePlayerWithShulker() && Config.correctEndingClipping()) {
                 for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
                     for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
                         if (player.getBoundingBox().overlaps(block.getBoundingBox().clone().shift(new Vector(0, 0.1, 0)))
@@ -55,7 +56,7 @@ public class ShulkerListener implements Listener {
                 }
             }
 
-            if (CONFIG.getBoolean("move-entity-with-shulker") && CONFIG.getBoolean("correct-ending-clipping")) {
+            if (Config.moveEntityWithShulker() && Config.correctEndingClipping()) {
                 for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
                     for (Entity entity : block.getLocation().getNearbyEntities(2, 2, 2)) {
                         if (entity instanceof Player
@@ -84,7 +85,7 @@ public class ShulkerListener implements Listener {
 
     @EventHandler
     public void updateCollisions(ServerTickEndEvent tickEndEvent) {
-        if (!Objects.requireNonNull(CONFIG.getString("method")).equalsIgnoreCase("SHULKER")) return;
+        if (!Config.getCollisionMethod().equals(CollisionMethod.SHULKER)) return;
         for (long id : BLOCK_MOVERS.keySet()) {
             // Get saved blocks
             List<MyBlockData> doorBlocks = BLOCK_MOVERS.get(id).getSavedBlocks();

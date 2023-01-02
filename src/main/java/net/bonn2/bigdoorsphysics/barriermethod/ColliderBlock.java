@@ -1,5 +1,6 @@
 package net.bonn2.bigdoorsphysics.barriermethod;
 
+import net.bonn2.bigdoorsphysics.util.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -7,7 +8,6 @@ import org.bukkit.util.BoundingBox;
 
 import java.util.Objects;
 
-import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
 public class ColliderBlock {
@@ -26,7 +26,7 @@ public class ColliderBlock {
 
     public void place() {
         location.getWorld().setBlockData(location, Material.BARRIER.createBlockData());
-        if (CONFIG.getBoolean("hide-barriers")) {
+        if (Config.hideBarriers()) {
             // Hide block from distant players
             for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
                 if (!player.getWorld().equals(location.getWorld())) continue;

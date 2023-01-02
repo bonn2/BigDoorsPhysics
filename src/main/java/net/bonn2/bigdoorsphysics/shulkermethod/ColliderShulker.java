@@ -1,5 +1,6 @@
 package net.bonn2.bigdoorsphysics.shulkermethod;
 
+import net.bonn2.bigdoorsphysics.util.Config;
 import net.kyori.adventure.text.Component;
 import nl.pim16aap2.bigDoors.reflection.BukkitReflectionUtil;
 import org.bukkit.Location;
@@ -11,8 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
 
 public class ColliderShulker {
     public static final double SHULKER_OFFSET = 0.74063;
@@ -68,7 +67,7 @@ public class ColliderShulker {
 
         armorStand.teleport(location.clone().subtract(0, SHULKER_OFFSET, 0), true);
 
-        if (CONFIG.getBoolean("move-player-with-shulker")) {
+        if (Config.movePlayerWithShulker()) {
             for (Player player : location.getWorld().getPlayers()) {
                 if (player.getBoundingBox().overlaps(shulker.getBoundingBox())) {
                     BukkitReflectionUtil.resetFlyingCounters(player);
@@ -83,7 +82,7 @@ public class ColliderShulker {
             }
         }
 
-        if (CONFIG.getBoolean("move-entity-with-shulker")) {
+        if (Config.moveEntityWithShulker()) {
             for (Entity entity : location.getNearbyEntities(3, 3, 3)) {
                 if (entity instanceof Player
                         || entity instanceof FallingBlock

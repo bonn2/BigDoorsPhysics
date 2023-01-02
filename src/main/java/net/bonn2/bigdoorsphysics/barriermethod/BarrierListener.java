@@ -1,6 +1,7 @@
 package net.bonn2.bigdoorsphysics.barriermethod;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
+import net.bonn2.bigdoorsphysics.util.Config;
 import nl.pim16aap2.bigDoors.BigDoors;
 import nl.pim16aap2.bigDoors.events.DoorEventToggle;
 import nl.pim16aap2.bigDoors.events.DoorEventToggleEnd;
@@ -19,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.CONFIG;
-
 public class BarrierListener implements Listener {
 
     private final Map<Long, BlockMover> BLOCK_MOVERS = new HashMap<>();
@@ -32,7 +31,7 @@ public class BarrierListener implements Listener {
     @EventHandler
     public void onBigDoorsToggleStart(@NotNull DoorEventToggleStart startEvent) {
         if (startEvent.instantOpen()) return;
-        if (CONFIG.getBoolean("protect-portcullises")) {
+        if (Config.protectPortcullises()) {
             if (startEvent.getToggleType().equals(DoorEventToggle.ToggleType.CLOSE)) {
                 if (startEvent.getDoor().getType().equals(DoorType.PORTCULLIS)) {
                     Location size = startEvent.getDoor().getMaximum().subtract(startEvent.getDoor().getMinimum());
@@ -47,7 +46,7 @@ public class BarrierListener implements Listener {
     @EventHandler
     public void onBigDoorsToggleEnd(@NotNull DoorEventToggleEnd endEvent) {
         if (endEvent.instantOpen()) return;
-        if (CONFIG.getBoolean("protect-portcullises")) {
+        if (Config.protectPortcullises()) {
             if (endEvent.getToggleType().equals(DoorEventToggle.ToggleType.CLOSE)) {
                 if (endEvent.getDoor().getType().equals(DoorType.PORTCULLIS)) {
                     Location size = endEvent.getDoor().getMaximum().subtract(endEvent.getDoor().getMinimum());
@@ -76,7 +75,7 @@ public class BarrierListener implements Listener {
                 for (MyBlockData doorBlock : doorBlocks) {
                     Location direction = new Location(doorBlock.getFBlock().getLocation().getWorld(), 0, 0, 0);
                     // Only calculate direction if players should be moved
-                    if (CONFIG.getBoolean("move-players")) {
+                    if (Config.movePlayerWithBarrier()) {
                         Vector velocity = doorBlock.getFBlock().getVelocity();
                         if (velocity.getX() > 0)
                             direction = direction.add(1,0,0);
