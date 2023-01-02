@@ -5,7 +5,7 @@ api-version: 1.17
 depend: [ BigDoors ]
 softdepend: [ ProtocolLib ]
 authors: [ bonn2 ]
-description: Using every trick in the book
+description: Add collisions to the BigDoors plugin
 commands:
   killbigdoorsphysicsentities:
     description: Kill all entities created by the BigDoorsPhysics plugin
