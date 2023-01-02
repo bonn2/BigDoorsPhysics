@@ -16,6 +16,8 @@ public class Config {
     static boolean movePlayerWithShulker = true;
     static boolean moveEntityWithShulker = true;
     static boolean correctEndingClipping = true;
+    static boolean cullDistantShulkers = true;
+    static int shulkerCullDistance = 4;
     static boolean hideBarriers = true;
     static boolean movePlayerWithBarrier = true;
     static boolean protectPortcullises = true;
@@ -50,6 +52,19 @@ public class Config {
             # teleported up a small amount to prevent them from falling through the door
             # This will only apply to entities / players if they are enabled above
             # This should have a minimal performance impact
+            """;
+
+    static String cullDistantShulkersComment =
+            """
+            # Hide shulkers that are far away from the player
+            # NOTE: This requires ProtocolLib to work
+            """;
+
+    static String shulkerCullDistanceComment =
+            """
+            # How many blocks away a shulker needs to be to be culled
+            # Set to number less than 0 to always cull shulkers
+            # NOTE: If player interacts will culled shulker it will behave similarly to a ghost block
             """;
 
     static String hideBarriersComment =
@@ -140,6 +155,22 @@ public class Config {
             needToUpgrade = true;
         }
 
+        // Get cullDistantShulkers
+        if (config.contains("cull-distant-shulkers"))
+            cullDistantShulkers = config.getBoolean("cull-distant-shulkers");
+        else {
+            warnMissing("cull-distant-shulkers");
+            needToUpgrade = true;
+        }
+
+        // Get shulkerCullDistance
+        if (config.contains("shulker-cull-distance"))
+            shulkerCullDistance = config.getInt("shulker-cull-distance");
+        else {
+            warnMissing("shulker-cull-distance");
+            needToUpgrade = true;
+        }
+
         // Get hideBarriers
         if (config.contains("hide-barriers"))
             hideBarriers = config.getBoolean("hide-barriers");
@@ -191,34 +222,42 @@ public class Config {
     private static void write() {
         try (FileOutputStream output = new FileOutputStream(configFile, false)) {
             String builder =
-                    collisionMethodComment +
-                    "collisionMethod: " +
-                    collisionMethod +
-                    "\n\n" +
-                    movePlayerWithShulkerComment +
-                    "move-player-with-shulker: " +
-                    moveEntityWithShulker +
-                    "\n\n" +
-                    moveEntityWithShulkerComment +
-                    "move-entity-with-shulker: " +
-                    moveEntityWithShulker +
-                    "\n\n" +
-                    correctEndingClippingComment +
-                    "correct-ending-clipping: " +
-                    correctEndingClipping +
-                    "\n\n" +
-                    hideBarriersComment +
-                    "hide-barriers: " +
-                    hideBarriers +
-                    "\n\n" +
-                    movePlayerWithBarrierComment +
-                    "move-player-with-barrier: " +
-                    movePlayerWithBarrier +
-                    "\n\n" +
-                    protectPortcullisesComment +
-                    "protect-portcullises: " +
-                    protectPortcullises +
-                    "\n";
+                            collisionMethodComment +
+                            "collisionMethod: " +
+                            collisionMethod +
+                            "\n\n" +
+                            movePlayerWithShulkerComment +
+                            "move-player-with-shulker: " +
+                            moveEntityWithShulker +
+                            "\n\n" +
+                            moveEntityWithShulkerComment +
+                            "move-entity-with-shulker: " +
+                            moveEntityWithShulker +
+                            "\n\n" +
+                            correctEndingClippingComment +
+                            "correct-ending-clipping: " +
+                            correctEndingClipping +
+                            "\n\n" +
+                            cullDistantShulkersComment +
+                            "cull-distant-shulkers: " +
+                            cullDistantShulkers +
+                            "\n\n" +
+                            shulkerCullDistanceComment +
+                            "shulker-cull-distance: " +
+                            shulkerCullDistance +
+                            "\n\n" +
+                            hideBarriersComment +
+                            "hide-barriers: " +
+                            hideBarriers +
+                            "\n\n" +
+                            movePlayerWithBarrierComment +
+                            "move-player-with-barrier: " +
+                            movePlayerWithBarrier +
+                            "\n\n" +
+                            protectPortcullisesComment +
+                            "protect-portcullises: " +
+                            protectPortcullises +
+                            "\n";
             output.write(builder.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -239,6 +278,14 @@ public class Config {
 
     public static boolean correctEndingClipping() {
         return correctEndingClipping;
+    }
+
+    public static boolean cullDistantShulkers() {
+        return cullDistantShulkers;
+    }
+
+    public static int shulkerCullDistance() {
+        return shulkerCullDistance;
     }
 
     public static boolean hideBarriers() {

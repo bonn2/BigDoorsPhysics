@@ -61,7 +61,8 @@ public final class BigDoorsPhysics extends JavaPlugin {
         getCommand("killbigdoorsphysicsentities").setExecutor(new CommandListener());
 
         // Register packet modifier
-        if (getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
+        if (getServer().getPluginManager().isPluginEnabled("ProtocolLib")
+        && Config.cullDistantShulkers()) {
             getLogger().info("Enabling ProtocolLib Support");
             ShulkerPacketEditor.register();
         }

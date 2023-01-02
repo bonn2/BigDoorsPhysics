@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import net.bonn2.bigdoorsphysics.util.Config;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 
@@ -32,7 +33,7 @@ public class ShulkerPacketEditor {
                             // Calculate the distance
                             double distance = event.getPlayer().getLocation().distance(entity.getLocation().add(0, ColliderShulker.SHULKER_OFFSET, 0));
                             // Only cull shulker if they are too far away to interact with
-                            if (distance > 4) {
+                            if (distance > Config.shulkerCullDistance()) {
                                 packetContainer.getModifier().write(2, event.getPlayer().getWorld().getMaxHeight() + 10000);
                                 event.setPacket(packetContainer);
                             }
@@ -67,7 +68,7 @@ public class ShulkerPacketEditor {
                             newPacket.getBooleans().write(0, false);
 
                             // Set Y value to show or hide shulker
-                            if (distance > 4) {
+                            if (distance > Config.shulkerCullDistance()) {
                                 // Hide Shulker
                                 newPacket.getDoubles().write(1, entity.getLocation().getY() + 10000);
                             } else {
