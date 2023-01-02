@@ -130,7 +130,6 @@ public class Config {
             needToUpgrade = true;
         }
 
-
         // Get movePlayerWithShulker
         if (config.contains("move-player-with-shulker"))
             movePlayerWithShulker = config.getBoolean("move-player-with-shulker");
