@@ -27,6 +27,7 @@ public class ShulkerPacketEditor {
                     public void onPacketSending(PacketEvent event) {
                         // Get entity the packet is acting on
                         Entity entity = event.getPacket().getEntityModifier(event).getValues().get(0);
+                        if (Objects.equals(entity, null)) return;
                         // Only hide BigDoorsPhysics entities
                         if (Objects.equals(entity.customName(), Component.text("BigDoorsPhysicsAS"))) {
                             PacketContainer packetContainer = event.getPacket().deepClone();
@@ -49,6 +50,7 @@ public class ShulkerPacketEditor {
                     public void onPacketSending(PacketEvent event) {
                         // Get entity the packet is acting on
                         Entity entity = event.getPacket().getEntityModifier(event).getValues().get(0);
+                        if (Objects.equals(entity, null)) return;
                         // Only hide BigDoorsPhysics entities
                         if (Objects.equals(entity.customName(), Component.text("BigDoorsPhysicsAS"))) {
                             // Cancel original packet
