@@ -8,7 +8,6 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import net.bonn2.bigdoorsphysics.util.Config;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 
 import java.lang.reflect.InvocationTargetException;
@@ -29,7 +28,7 @@ public class ShulkerPacketEditor {
                         Entity entity = event.getPacket().getEntityModifier(event).getValues().get(0);
                         if (Objects.equals(entity, null)) return;
                         // Only hide BigDoorsPhysics entities
-                        if (Objects.equals(entity.customName(), Component.text("BigDoorsPhysicsAS"))) {
+                        if (Objects.equals(entity.getCustomName(), "BigDoorsPhysicsAS")) {
                             PacketContainer packetContainer = event.getPacket().deepClone();
                             // Calculate the distance
                             double distance = event.getPlayer().getLocation().distance(entity.getLocation().add(0, ColliderShulker.SHULKER_OFFSET, 0));
@@ -52,7 +51,7 @@ public class ShulkerPacketEditor {
                         Entity entity = event.getPacket().getEntityModifier(event).getValues().get(0);
                         if (Objects.equals(entity, null)) return;
                         // Only hide BigDoorsPhysics entities
-                        if (Objects.equals(entity.customName(), Component.text("BigDoorsPhysicsAS"))) {
+                        if (Objects.equals(entity.getCustomName(), "BigDoorsPhysicsAS")) {
                             // Cancel original packet
                             event.setCancelled(true);
 
