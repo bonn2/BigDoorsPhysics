@@ -223,7 +223,7 @@ public class Config {
         try (FileOutputStream output = new FileOutputStream(configFile, false)) {
             String builder =
                             collisionMethodComment +
-                            "collisionMethod: " +
+                            "method: " +
                             collisionMethod +
                             "\n\n" +
                             movePlayerWithShulkerComment +
