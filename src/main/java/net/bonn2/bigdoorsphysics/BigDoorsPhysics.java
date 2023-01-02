@@ -7,6 +7,7 @@ import net.bonn2.bigdoorsphysics.shulkermethod.ColliderShulker;
 import net.bonn2.bigdoorsphysics.shulkermethod.CommandListener;
 import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerListener;
 import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerPacketEditor;
+import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import nl.pim16aap2.bigDoors.BigDoors;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,7 +63,8 @@ public final class BigDoorsPhysics extends JavaPlugin {
 
         // Register packet modifier
         if (getServer().getPluginManager().isPluginEnabled("ProtocolLib")
-        && Config.cullDistantShulkers()) {
+        && Config.cullDistantShulkers()
+        && Config.getCollisionMethod().equals(CollisionMethod.SHULKER)) {
             getLogger().info("Enabling ProtocolLib Support");
             ShulkerPacketEditor.register();
         }
