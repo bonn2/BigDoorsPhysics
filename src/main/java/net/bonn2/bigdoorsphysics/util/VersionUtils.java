@@ -19,6 +19,7 @@ public class VersionUtils {
 
     public static void teleportWithPassenger(Entity entity, Entity passenger, Location location) {
         if (majorVersion >= 19) {
+            //noinspection UnstableApiUsage
             entity.teleport(location, true);
         } else {
             entity.removePassenger(passenger);
