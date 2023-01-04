@@ -54,6 +54,7 @@ public class ColliderShulker {
         shulker.customName(Component.text("BigDoorsPhysicsS"));
         shulker.setCustomNameVisible(false);
         shulker.setInvisible(true);
+        shulker.setInvulnerable(true);
         shulker.setGravity(false);
         shulker.setAI(false);
         shulker.setPeek(0);
