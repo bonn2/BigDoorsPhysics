@@ -13,6 +13,7 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,7 @@ public class ShulkerListener implements Listener {
 
     private final Map<Long, BlockMover> BLOCK_MOVERS = new HashMap<>();
     private final Map<Long, List<ColliderShulker>> COLLIDERS = new HashMap<>();
+    private final List<UUID> ENTITY_UUIDS = new ArrayList<>();
 
     public Map<Long, List<ColliderShulker>> getColliders() {
         return COLLIDERS;
@@ -75,6 +77,7 @@ public class ShulkerListener implements Listener {
             }
 
             for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
+                ENTITY_UUIDS.removeAll(block.getUUIDS());
                 block.remove();
             }
         }
@@ -104,7 +107,14 @@ public class ShulkerListener implements Listener {
                     COLLIDERS.put(id, shulkers);
                 }
                 COLLIDERS.get(id).forEach(ColliderShulker::place);
+                COLLIDERS.get(id).forEach((colliderShulker -> ENTITY_UUIDS.addAll(colliderShulker.getUUIDS())));
             }
         }
+    }
+
+    @EventHandler
+    public void protectShulkers(@NotNull EntityDamageEvent event) {
+        if (ENTITY_UUIDS.contains(event.getEntity().getUniqueId()))
+            event.setCancelled(true);
     }
 }

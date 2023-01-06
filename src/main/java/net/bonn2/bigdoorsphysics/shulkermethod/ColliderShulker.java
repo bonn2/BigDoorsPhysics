@@ -36,6 +36,10 @@ public class ColliderShulker {
         return shulker.getLocation();
     }
 
+    public List<UUID> getUUIDS() {
+        return List.of(armorStand.getUniqueId(), shulker.getUniqueId());
+    }
+
     public void place() {
         armorStand = spawnLocation.getWorld().spawn(spawnLocation.clone().add(0, 100000, 0), ArmorStand.class);
         armorStand.setPersistent(true);
