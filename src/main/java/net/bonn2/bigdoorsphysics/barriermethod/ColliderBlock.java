@@ -4,6 +4,7 @@ import net.bonn2.bigdoorsphysics.util.Config;
 import net.bonn2.bigdoorsphysics.util.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 
@@ -14,6 +15,7 @@ import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 public class ColliderBlock {
     public final Location location;
     public final Location direction;
+    private BlockData oldBlock;
 
     /**
      * @param location The position to place the block
@@ -26,6 +28,8 @@ public class ColliderBlock {
     }
 
     public void place() {
+        oldBlock = location.getWorld().getBlockAt(location).getBlockData();
+        if (location.getWorld().getBlockAt(location).getType().isCollidable()) return;
         location.getWorld().getBlockAt(location).setBlockData(Material.BARRIER.createBlockData());
         if (Config.hideBarriers()) {
             // Hide block from distant players
@@ -54,7 +58,7 @@ public class ColliderBlock {
     }
 
     public void remove() {
-        if (location.getBlock().getType() == Material.BARRIER)
-            location.getWorld().getBlockAt(location).setBlockData(Material.AIR.createBlockData());
+        if (location.getBlock().getType() == Material.BARRIER && !oldBlock.getMaterial().isCollidable())
+            location.getWorld().getBlockAt(location).setBlockData(oldBlock);
     }
 }
