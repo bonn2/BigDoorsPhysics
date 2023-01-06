@@ -28,16 +28,17 @@ public class ShulkerListener implements Listener {
     public Map<Long, List<ColliderShulker>> getColliders() {
         return COLLIDERS;
     }
+
     @EventHandler
     public void onBigDoorsToggleStart(@NotNull DoorEventToggleStart startEvent) {
-        if (!Config.getCollisionMethod().equals(CollisionMethod.SHULKER)) return;
+        if (!Config.getCollisionMethod().getOrDefault(startEvent.getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.SHULKER)) return;
         if (startEvent.instantOpen()) return;
         BLOCK_MOVERS.put(startEvent.getDoor().getDoorUID(), BigDoors.get().getCommander().getBlockMover(startEvent.getDoor().getDoorUID()));
     }
 
     @EventHandler
     public void onBigDoorsToggleEnd(@NotNull DoorEventToggleEnd endEvent) {
-        if (!Config.getCollisionMethod().equals(CollisionMethod.SHULKER)) return;
+        if (!Config.getCollisionMethod().getOrDefault(endEvent.getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.SHULKER)) return;
         if (endEvent.instantOpen()) return;
 
         if (COLLIDERS.containsKey(endEvent.getDoor().getDoorUID())) {
@@ -84,8 +85,8 @@ public class ShulkerListener implements Listener {
 
     @EventHandler
     public void updateCollisions(ServerTickEndEvent tickEndEvent) {
-        if (!Config.getCollisionMethod().equals(CollisionMethod.SHULKER)) return;
         for (long id : BLOCK_MOVERS.keySet()) {
+            if (!Config.getCollisionMethod().getOrDefault(BLOCK_MOVERS.get(id).getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.SHULKER)) continue;
             // Get saved blocks
             List<MyBlockData> doorBlocks = BLOCK_MOVERS.get(id).getSavedBlocks();
             if (doorBlocks.size() == 0) continue;

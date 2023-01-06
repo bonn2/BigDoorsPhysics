@@ -1,10 +1,13 @@
 package net.bonn2.bigdoorsphysics.util;
 
+import nl.pim16aap2.bigDoors.util.DoorType;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
@@ -12,7 +15,7 @@ public class Config {
 
     static final File configFile = new File(PLUGIN.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
 
-    static CollisionMethod collisionMethod = CollisionMethod.INVALID;
+    static Map<DoorType, CollisionMethod> collisionMethod = new HashMap<>(4);
     static boolean movePlayerWithShulker = true;
     static boolean moveEntityWithShulker = true;
     static boolean correctEndingClipping = true;
@@ -25,8 +28,8 @@ public class Config {
     static String collisionMethodComment =
             """
             # How the plugin should create the colliders
-            # Valid options: BARRIER, SHULKER
-            # Any invalid selection will just disable collisions
+            # Valid options: BARRIER, SHULKER, NONE
+            # Any invalid selection will be set to the default for your version
             """;
 
     static String movePlayerWithShulkerComment =
@@ -117,16 +120,48 @@ public class Config {
         // Get CollisionMethod
         if (config.contains("method")) {
             String methodConfig = config.getString("method");
-            if (methodConfig == null) collisionMethod = CollisionMethod.INVALID;
+            if (methodConfig == null) {
+                collisionMethod.put(DoorType.DOOR, CollisionMethod.safeValueOf(config.getString("method.door", CollisionMethod.getDefaultValue().name())));
+                collisionMethod.put(DoorType.DRAWBRIDGE, CollisionMethod.safeValueOf(config.getString("method.drawbridge", CollisionMethod.getDefaultValue().name())));
+                collisionMethod.put(DoorType.PORTCULLIS, CollisionMethod.safeValueOf(config.getString("method.portcullis", CollisionMethod.getDefaultValue().name())));
+                collisionMethod.put(DoorType.SLIDINGDOOR, CollisionMethod.safeValueOf(config.getString("method.sliding", CollisionMethod.getDefaultValue().name())));
+            }
             else {
                 switch (methodConfig.toUpperCase()) {
-                    case "BARRIER" -> collisionMethod = CollisionMethod.BARRIER;
-                    case "SHULKER" -> collisionMethod = CollisionMethod.SHULKER;
-                    default -> collisionMethod = CollisionMethod.INVALID;
+                    case "BARRIER" -> {
+                        collisionMethod.put(DoorType.DOOR, CollisionMethod.BARRIER);
+                        collisionMethod.put(DoorType.DRAWBRIDGE, CollisionMethod.BARRIER);
+                        collisionMethod.put(DoorType.PORTCULLIS, CollisionMethod.BARRIER);
+                        collisionMethod.put(DoorType.SLIDINGDOOR, CollisionMethod.BARRIER);
+                        needToUpgrade = true;
+                    }
+                    case "SHULKER" -> {
+                        collisionMethod.put(DoorType.DOOR, CollisionMethod.SHULKER);
+                        collisionMethod.put(DoorType.DRAWBRIDGE, CollisionMethod.SHULKER);
+                        collisionMethod.put(DoorType.PORTCULLIS, CollisionMethod.SHULKER);
+                        collisionMethod.put(DoorType.SLIDINGDOOR, CollisionMethod.SHULKER);
+                        needToUpgrade = true;
+                    }
+                    default -> {
+                        collisionMethod.put(DoorType.DOOR, CollisionMethod.safeValueOf(config.getString("method.door", CollisionMethod.getDefaultValue().name())));
+                        collisionMethod.put(DoorType.DRAWBRIDGE, CollisionMethod.safeValueOf(config.getString("method.drawbridge", CollisionMethod.getDefaultValue().name())));
+                        collisionMethod.put(DoorType.PORTCULLIS, CollisionMethod.safeValueOf(config.getString("method.portcullis", CollisionMethod.getDefaultValue().name())));
+                        collisionMethod.put(DoorType.SLIDINGDOOR, CollisionMethod.safeValueOf(config.getString("method.sliding", CollisionMethod.getDefaultValue().name())));
+                        if (!(config.contains("method.door")
+                                && config.contains("method.drawbridge")
+                                && config.contains("method.portcullis")
+                                && config.contains("method.sliding"))) {
+                            needToUpgrade = true;
+                        }
+                    }
                 }
             }
         } else {
             warnMissing("method");
+            collisionMethod.put(DoorType.DOOR, CollisionMethod.getDefaultValue());
+            collisionMethod.put(DoorType.DRAWBRIDGE, CollisionMethod.getDefaultValue());
+            collisionMethod.put(DoorType.PORTCULLIS, CollisionMethod.getDefaultValue());
+            collisionMethod.put(DoorType.SLIDINGDOOR, CollisionMethod.getDefaultValue());
             needToUpgrade = true;
         }
 
@@ -221,9 +256,17 @@ public class Config {
     private static void write() {
         try (FileOutputStream output = new FileOutputStream(configFile, false)) {
             String builder =
+                    ""+
                             collisionMethodComment +
-                            "method: " +
-                            collisionMethod +
+                            "method:" +
+                            "\n  door: " +
+                            collisionMethod.getOrDefault(DoorType.DOOR, CollisionMethod.getDefaultValue()) +
+                            "\n  drawbridge: " +
+                            collisionMethod.getOrDefault(DoorType.DRAWBRIDGE, CollisionMethod.getDefaultValue()) +
+                            "\n  portcullis: " +
+                            collisionMethod.getOrDefault(DoorType.PORTCULLIS, CollisionMethod.getDefaultValue()) +
+                            "\n  sliding: " +
+                            collisionMethod.getOrDefault(DoorType.SLIDINGDOOR, CollisionMethod.getDefaultValue()) +
                             "\n\n" +
                             movePlayerWithShulkerComment +
                             "move-player-with-shulker: " +
@@ -263,7 +306,7 @@ public class Config {
         }
     }
 
-    public static CollisionMethod getCollisionMethod() {
+    public static Map<DoorType, CollisionMethod> getCollisionMethod() {
         return collisionMethod;
     }
 

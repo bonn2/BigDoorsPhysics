@@ -10,6 +10,7 @@ import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerPacketEditor;
 import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import nl.pim16aap2.bigDoors.BigDoors;
+import nl.pim16aap2.bigDoors.util.DoorType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BigDoorsPhysics extends JavaPlugin {
@@ -39,23 +40,19 @@ public final class BigDoorsPhysics extends JavaPlugin {
 
         // Register Events
         getLogger().info("Registering Events");
-        switch (Config.getCollisionMethod()) {
-            case BARRIER -> {
-                barrierListener = new BarrierListener();
-                getServer().getPluginManager().registerEvents(barrierListener, this);
-                metrics.addCustomChart(new Metrics.SimplePie("collision_method", () -> "Barrier"));
-            }
-            case SHULKER -> {
-                shulkerListener = new ShulkerListener();
-                getServer().getPluginManager().registerEvents(shulkerListener, this);
-                metrics.addCustomChart(new Metrics.SimplePie("collision_method", () -> "Shulker"));
-            }
-            default -> {
-                getLogger().severe("Invalid collision method selected! Aborting Loading!");
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
+        if (Config.getCollisionMethod().containsValue(CollisionMethod.BARRIER)) {
+            barrierListener = new BarrierListener();
+            getServer().getPluginManager().registerEvents(barrierListener, this);
         }
+        if (Config.getCollisionMethod().containsValue(CollisionMethod.SHULKER)) {
+            shulkerListener = new ShulkerListener();
+            getServer().getPluginManager().registerEvents(shulkerListener, this);
+        }
+
+        metrics.addCustomChart(new Metrics.SimplePie("door_method", () -> Config.getCollisionMethod().getOrDefault(DoorType.DOOR, CollisionMethod.NONE).name()));
+        metrics.addCustomChart(new Metrics.SimplePie("drawbridge_method", () -> Config.getCollisionMethod().getOrDefault(DoorType.DRAWBRIDGE, CollisionMethod.NONE).name()));
+        metrics.addCustomChart(new Metrics.SimplePie("portcullis_method", () -> Config.getCollisionMethod().getOrDefault(DoorType.PORTCULLIS, CollisionMethod.NONE).name()));
+        metrics.addCustomChart(new Metrics.SimplePie("sliding_method", () -> Config.getCollisionMethod().getOrDefault(DoorType.SLIDINGDOOR, CollisionMethod.NONE).name()));
 
         // Register Commands
         getLogger().info("Registering Commands");
@@ -64,7 +61,7 @@ public final class BigDoorsPhysics extends JavaPlugin {
         // Register packet modifier
         if (getServer().getPluginManager().isPluginEnabled("ProtocolLib")
         && Config.cullDistantShulkers()
-        && Config.getCollisionMethod().equals(CollisionMethod.SHULKER)) {
+        && Config.getCollisionMethod().containsValue(CollisionMethod.SHULKER)) {
             getLogger().info("Enabling ProtocolLib Support");
             ShulkerPacketEditor.register();
         }

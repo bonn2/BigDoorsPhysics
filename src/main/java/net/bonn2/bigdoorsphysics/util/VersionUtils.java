@@ -8,7 +8,7 @@ import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
 public class VersionUtils {
 
-    static int majorVersion = Integer.parseInt(PLUGIN.getServer().getMinecraftVersion().split("\\.")[1]);
+    private static final int majorVersion = Integer.parseInt(PLUGIN.getServer().getMinecraftVersion().split("\\.")[1]);
 
     public static boolean isCollidable(Material material) {
         if (majorVersion >= 17)
@@ -26,5 +26,9 @@ public class VersionUtils {
             entity.teleport(location);
             entity.addPassenger(passenger);
         }
+    }
+
+    public static int getMajorVersion() {
+        return majorVersion;
     }
 }

@@ -1,6 +1,7 @@
 package net.bonn2.bigdoorsphysics.barriermethod;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
+import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import nl.pim16aap2.bigDoors.BigDoors;
 import nl.pim16aap2.bigDoors.events.DoorEventToggle;
@@ -28,9 +29,11 @@ public class BarrierListener implements Listener {
     public Map<Long, List<ColliderBlock>> getColliders() {
         return COLLIDERS;
     }
+
     @EventHandler
     public void onBigDoorsToggleStart(@NotNull DoorEventToggleStart startEvent) {
         if (startEvent.instantOpen()) return;
+        if (!Config.getCollisionMethod().getOrDefault(startEvent.getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.BARRIER)) return;
         if (Config.protectPortcullises()) {
             if (startEvent.getToggleType().equals(DoorEventToggle.ToggleType.CLOSE)) {
                 if (startEvent.getDoor().getType().equals(DoorType.PORTCULLIS)) {
@@ -46,6 +49,7 @@ public class BarrierListener implements Listener {
     @EventHandler
     public void onBigDoorsToggleEnd(@NotNull DoorEventToggleEnd endEvent) {
         if (endEvent.instantOpen()) return;
+        if (!Config.getCollisionMethod().getOrDefault(endEvent.getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.BARRIER)) return;
         if (Config.protectPortcullises()) {
             if (endEvent.getToggleType().equals(DoorEventToggle.ToggleType.CLOSE)) {
                 if (endEvent.getDoor().getType().equals(DoorType.PORTCULLIS)) {
@@ -65,6 +69,7 @@ public class BarrierListener implements Listener {
     @EventHandler
     public void updateCollisions(ServerTickEndEvent tickEndEvent) {
         for (long id : BLOCK_MOVERS.keySet()) {
+            if (!Config.getCollisionMethod().getOrDefault(BLOCK_MOVERS.get(id).getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.BARRIER)) return;
             // Get saved blocks
             List<MyBlockData> doorBlocks = BLOCK_MOVERS.get(id).getSavedBlocks();
             if (doorBlocks.size() == 0) continue;
