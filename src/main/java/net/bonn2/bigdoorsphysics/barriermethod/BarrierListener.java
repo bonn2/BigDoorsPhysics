@@ -4,11 +4,9 @@ import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import nl.pim16aap2.bigDoors.BigDoors;
-import nl.pim16aap2.bigDoors.events.DoorEventToggle;
 import nl.pim16aap2.bigDoors.events.DoorEventToggleEnd;
 import nl.pim16aap2.bigDoors.events.DoorEventToggleStart;
 import nl.pim16aap2.bigDoors.moveBlocks.BlockMover;
-import nl.pim16aap2.bigDoors.util.DoorType;
 import nl.pim16aap2.bigDoors.util.MyBlockData;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -34,15 +32,6 @@ public class BarrierListener implements Listener {
     public void onBigDoorsToggleStart(@NotNull DoorEventToggleStart startEvent) {
         if (startEvent.instantOpen()) return;
         if (!Config.getCollisionMethod().getOrDefault(startEvent.getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.BARRIER)) return;
-        if (Config.protectPortcullises()) {
-            if (startEvent.getToggleType().equals(DoorEventToggle.ToggleType.CLOSE)) {
-                if (startEvent.getDoor().getType().equals(DoorType.PORTCULLIS)) {
-                    Location size = startEvent.getDoor().getMaximum().subtract(startEvent.getDoor().getMinimum());
-                    if (Math.abs(size.getBlockX()) == 0 || Math.abs(size.getBlockZ()) == 0)
-                        return;
-                }
-            }
-        }
         BLOCK_MOVERS.put(startEvent.getDoor().getDoorUID(), BigDoors.get().getCommander().getBlockMover(startEvent.getDoor().getDoorUID()));
     }
 
@@ -50,15 +39,6 @@ public class BarrierListener implements Listener {
     public void onBigDoorsToggleEnd(@NotNull DoorEventToggleEnd endEvent) {
         if (endEvent.instantOpen()) return;
         if (!Config.getCollisionMethod().getOrDefault(endEvent.getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.BARRIER)) return;
-        if (Config.protectPortcullises()) {
-            if (endEvent.getToggleType().equals(DoorEventToggle.ToggleType.CLOSE)) {
-                if (endEvent.getDoor().getType().equals(DoorType.PORTCULLIS)) {
-                    Location size = endEvent.getDoor().getMaximum().subtract(endEvent.getDoor().getMinimum());
-                    if (Math.abs(size.getBlockX()) == 0 || Math.abs(size.getBlockZ()) == 0)
-                        return;
-                }
-            }
-        }
         for (ColliderBlock block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
             block.remove();
         }
