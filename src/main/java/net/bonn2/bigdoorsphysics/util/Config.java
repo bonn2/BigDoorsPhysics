@@ -23,7 +23,6 @@ public class Config {
     static int shulkerCullDistance = 4;
     static boolean hideBarriers = true;
     static boolean movePlayerWithBarrier = true;
-    static boolean protectPortcullises = true;
 
     static String collisionMethodComment =
             """
@@ -82,14 +81,6 @@ public class Config {
             """
             # Move players who are near the door in accordance with the direction of the door
             # This may have a small performance impact, primarily tps
-            """;
-
-    static String protectPortcullisesComment =
-            """
-            # Protect portcullises from self destruction
-            # This prevents the plugin from operating on portcullises that are either one block wide or deep
-            # This option will be removed when the bug is resolved
-            # Disabling this option will likely make these doors delete their blocks when they are closed
             """;
 
     public static void load() {
@@ -226,14 +217,6 @@ public class Config {
             needToUpgrade = true;
         }
 
-        // Get protectPortcullises
-        if (config.contains("protect-portcullises"))
-            protectPortcullises = config.getBoolean("protect-portcullises");
-        else {
-            warnMissing("protect-portcullises");
-            needToUpgrade = true;
-        }
-
         // Write updated config if necessary
         if (needToUpgrade) write();
     }
@@ -295,10 +278,6 @@ public class Config {
                             movePlayerWithBarrierComment +
                             "move-player-with-barrier: " +
                             movePlayerWithBarrier +
-                            "\n\n" +
-                            protectPortcullisesComment +
-                            "protect-portcullises: " +
-                            protectPortcullises +
                             "\n";
             output.write(builder.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
@@ -336,9 +315,5 @@ public class Config {
 
     public static boolean movePlayerWithBarrier() {
         return movePlayerWithBarrier;
-    }
-
-    public static boolean protectPortcullises() {
-         return protectPortcullises;
     }
 }
