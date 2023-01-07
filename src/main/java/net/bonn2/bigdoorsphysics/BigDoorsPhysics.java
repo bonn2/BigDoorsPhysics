@@ -9,6 +9,7 @@ import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerListener;
 import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerPacketEditor;
 import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
+import net.bonn2.bigdoorsphysics.util.ModrinthUpdateChecker;
 import nl.pim16aap2.bigDoors.BigDoors;
 import nl.pim16aap2.bigDoors.util.DoorType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -65,6 +66,10 @@ public final class BigDoorsPhysics extends JavaPlugin {
             getLogger().info("Enabling ProtocolLib Support");
             ShulkerPacketEditor.register();
         }
+
+        // Check for updates
+        if (Config.checkForUpdates())
+            ModrinthUpdateChecker.check(this);
     }
 
     @Override

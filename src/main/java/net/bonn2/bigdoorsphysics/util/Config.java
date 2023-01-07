@@ -23,6 +23,7 @@ public class Config {
     static int shulkerCullDistance = 4;
     static boolean hideBarriers = true;
     static boolean movePlayerWithBarrier = true;
+    static boolean checkForUpdates = true;
 
     static String collisionMethodComment =
             """
@@ -81,6 +82,14 @@ public class Config {
             """
             # Move players who are near the door in accordance with the direction of the door
             # This may have a small performance impact, primarily tps
+            """;
+
+    static String checkForUpdatesComment =
+            """
+            ### Other Options
+            
+            # Whether or not to check for updates via https://modrinth.com/
+            # Updates will only be checked for on startup
             """;
 
     public static void load() {
@@ -217,6 +226,14 @@ public class Config {
             needToUpgrade = true;
         }
 
+        // Get checkForUpdates
+        if (config.contains("check-for-updates")) {
+            checkForUpdates = config.getBoolean("check-for-updates");
+        } else {
+            warnMissing("check-for-updates");
+            needToUpgrade = true;
+        }
+
         // Write updated config if necessary
         if (needToUpgrade) write();
     }
@@ -278,6 +295,10 @@ public class Config {
                             movePlayerWithBarrierComment +
                             "move-player-with-barrier: " +
                             movePlayerWithBarrier +
+                            "\n\n" +
+                            checkForUpdatesComment +
+                            "check-for-updates: " +
+                            checkForUpdates +
                             "\n";
             output.write(builder.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
@@ -315,5 +336,9 @@ public class Config {
 
     public static boolean movePlayerWithBarrier() {
         return movePlayerWithBarrier;
+    }
+
+    public static boolean checkForUpdates() {
+        return checkForUpdates;
     }
 }
