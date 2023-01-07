@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ModrinthUpdateChecker {
 
@@ -42,9 +43,12 @@ public class ModrinthUpdateChecker {
                     }
 
                     // Compare versions and print message if newer version is available
-                    if (latestVersion.get(0) > currentVersion.get(0) || latestVersion.get(1) > currentVersion.get(1) || latestVersion.get(2) > currentVersion.get(2)) {
+                    if (latestVersion.get(0) > currentVersion.get(0)
+                            || (latestVersion.get(1) > currentVersion.get(1) && Objects.equals(latestVersion.get(0), currentVersion.get(0)))
+                            || (latestVersion.get(2) > currentVersion.get(2) && Objects.equals(latestVersion.get(0), currentVersion.get(0)) && Objects.equals(latestVersion.get(1), currentVersion.get(1)))) {
                         plugin.getLogger().warning("An update is available %s -> %s".formatted(plugin.getDescription().getVersion(), latestVersionJson.get("version_number").getAsString()));
-                        plugin.getLogger().warning("Latest Changelog:\n%s\n\nGet it here: https://modrinth.com/plugin/%s/version/%s".formatted(
+                        plugin.getLogger().warning("Latest Changelog:\n%s\n%s\n\nGet it here: https://modrinth.com/plugin/%s/version/%s".formatted(
+                                        latestVersionJson.get("name").getAsString(),
                                         latestVersionJson.get("changelog").getAsString(),
                                         SLUG,
                                         latestVersionJson.get("version_number").getAsString()
