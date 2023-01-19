@@ -12,6 +12,7 @@ import org.bukkit.entity.Entity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
+import java.util.UUID;
 
 import static net.bonn2.bigdoorsphysics.BigDoorsPhysics.PLUGIN;
 
@@ -19,6 +20,22 @@ public class ShulkerPacketEditor {
 
     public static void register() {
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+        manager.addPacketListener(
+                new PacketAdapter(PLUGIN, ListenerPriority.HIGHEST,
+                        PacketType.Play.Server.SPAWN_ENTITY) {
+                    @Override
+                    public void onPacketSending(PacketEvent event) {
+                        // Get uuid of the spawned entity
+                        UUID uuid = event.getPacket().getUUIDs().read(0);
+                        if (ColliderShulker.getOwnedUUIDs().contains(uuid)) {
+                            PacketContainer packetContainer = event.getPacket().deepClone();
+                            packetContainer.getModifier().write(4, event.getPlayer().getWorld().getMaxHeight() + 10000);
+                            event.setPacket(packetContainer);
+                        }
+                    }
+                }
+        );
+
         manager.addPacketListener(
                 new PacketAdapter(PLUGIN, ListenerPriority.HIGHEST,
                         PacketType.Play.Server.ENTITY_TELEPORT) {

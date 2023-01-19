@@ -77,7 +77,7 @@ public class ShulkerListener implements Listener {
             }
 
             for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
-                ENTITY_UUIDS.removeAll(block.getUUIDS());
+                ENTITY_UUIDS.removeAll(block.getUUIDs());
                 block.remove();
             }
         }
@@ -107,7 +107,7 @@ public class ShulkerListener implements Listener {
                     COLLIDERS.put(id, shulkers);
                 }
                 COLLIDERS.get(id).forEach(ColliderShulker::place);
-                COLLIDERS.get(id).forEach((colliderShulker -> ENTITY_UUIDS.addAll(colliderShulker.getUUIDS())));
+                COLLIDERS.get(id).forEach((colliderShulker -> ENTITY_UUIDS.addAll(colliderShulker.getUUIDs())));
             }
         }
     }

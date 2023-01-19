@@ -24,6 +24,8 @@ public class ColliderShulker {
 
     private final List<UUID> movedEntities = new ArrayList<>();
 
+    private static final List<UUID> ownedUUIDs = new ArrayList<>();
+
     public ColliderShulker(Location spawnLocation) {
         this.spawnLocation = spawnLocation;
     }
@@ -36,36 +38,55 @@ public class ColliderShulker {
         return shulker.getLocation();
     }
 
-    public List<UUID> getUUIDS() {
+    /**
+     * Get the uuid of the shulker and armor stand owned by this instance
+     */
+    public List<UUID> getUUIDs() {
         return List.of(armorStand.getUniqueId(), shulker.getUniqueId());
     }
 
+    /**
+     * Get a list of all entities that any instance of collider shulker owns
+     */
+    public static List<UUID> getOwnedUUIDs() {
+        return ownedUUIDs;
+    }
+
     public void place() {
-        armorStand = spawnLocation.getWorld().spawn(spawnLocation.clone().add(0, 100000, 0), ArmorStand.class);
-        armorStand.setPersistent(true);
-        armorStand.customName(Component.text("BigDoorsPhysicsAS"));
-        armorStand.setCustomNameVisible(false);
-        armorStand.setGravity(false);
-        armorStand.setBasePlate(false);
-        armorStand.setInvisible(true);
-        armorStand.setInvulnerable(true);
-        armorStand.setAI(false);
-        armorStand.setSilent(true);
-        armorStand.setCanPickupItems(false);
-        armorStand.setSmall(true);
-        shulker = spawnLocation.getWorld().spawn(spawnLocation.clone().add(0, 100000, 0), Shulker.class);
-        shulker.setPersistent(true);
-        shulker.customName(Component.text("BigDoorsPhysicsS"));
-        shulker.setCustomNameVisible(false);
-        shulker.setInvisible(true);
-        shulker.setInvulnerable(true);
-        shulker.setGravity(false);
-        shulker.setAI(false);
-        shulker.setPeek(0);
-        shulker.setAware(false);
-        shulker.setCanPickupItems(false);
-        armorStand.addPassenger(shulker);
-        armorStand.teleport(spawnLocation.subtract(0, SHULKER_OFFSET, 0));
+        Location adjustedSpwanLocation = Config.spawnShulkersOnDoor() ?
+                spawnLocation.clone().subtract(0, SHULKER_OFFSET,0) :
+                spawnLocation.clone().add(0, 100000 + spawnLocation.getWorld().getMaxHeight(),0);
+
+        armorStand = spawnLocation.getWorld().spawn(adjustedSpwanLocation, ArmorStand.class, entity -> {
+            ownedUUIDs.add(entity.getUniqueId());
+            entity.setPersistent(true);
+            entity.customName(Component.text("BigDoorsPhysicsAS"));
+            entity.setCustomNameVisible(false);
+            entity.setGravity(false);
+            entity.setBasePlate(false);
+            entity.setInvisible(true);
+            entity.setInvulnerable(true);
+            entity.setAI(false);
+            entity.setSilent(true);
+            entity.setCanPickupItems(false);
+            entity.setSmall(true);
+        });
+        shulker = spawnLocation.getWorld().spawn(adjustedSpwanLocation, Shulker.class, entity -> {
+            ownedUUIDs.add(entity.getUniqueId());
+            entity.setPersistent(true);
+            entity.customName(Component.text("BigDoorsPhysicsS"));
+            entity.setPeek(0);
+            entity.setAware(false);
+            entity.setCustomNameVisible(false);
+            entity.setGravity(false);
+            entity.setInvisible(true);
+            entity.setInvulnerable(true);
+            entity.setAI(false);
+            entity.setSilent(true);
+            entity.setCanPickupItems(false);
+            armorStand.addPassenger(entity);
+            armorStand.teleport(spawnLocation.subtract(0, SHULKER_OFFSET, 0));
+        });
     }
 
     public void move(@NotNull Location location, Vector velocity) {
@@ -109,7 +130,9 @@ public class ColliderShulker {
     }
 
     public void remove() {
+        ownedUUIDs.remove(shulker.getUniqueId());
         shulker.remove();
+        ownedUUIDs.remove(armorStand.getUniqueId());
         armorStand.remove();
     }
 }
