@@ -352,6 +352,10 @@ public class Config {
         return shulkerCullDistance;
     }
 
+    public static boolean spawnShulkersOnDoor() {
+        return spawnShulkersOnDoor;
+    }
+
     public static boolean hideBarriers() {
         return hideBarriers;
     }
