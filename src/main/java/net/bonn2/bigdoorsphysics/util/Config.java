@@ -21,6 +21,7 @@ public class Config {
     static boolean correctEndingClipping = true;
     static boolean cullDistantShulkers = true;
     static int shulkerCullDistance = 4;
+    static boolean spawnShulkersOnDoor = PLUGIN.getServer().getPluginManager().isPluginEnabled("ProtocolLib");
     static boolean hideBarriers = true;
     static boolean movePlayerWithBarrier = true;
     static boolean checkForUpdates = true;
@@ -68,6 +69,15 @@ public class Config {
             # How many blocks away a shulker needs to be to be culled
             # Set to number less than 0 to always cull shulkers
             # NOTE: If player interacts will culled shulker it will behave similarly to a ghost block
+            """;
+
+    static String spawnShulkersOnDoorComment =
+            """
+            # If shulkers should be spawned on the door, or far away
+            # When this is set to true the shulkers will be spawned near their final locations
+            # When this is set to false the shulkers will be spawned ~100k blocks above the world height to hide them while they are being set up
+            # Enabling this can help with compatibility with region plugins (Specifically if you are using regions to control mob spawning)
+            # By default this is enabled if ProtocolLib is on the server and shulkers will instead be hidden during setup using packets
             """;
 
     static String hideBarriersComment =
@@ -205,6 +215,14 @@ public class Config {
             needToUpgrade = true;
         }
 
+        // Get spawnShulkersOnDoor
+        if (config.contains("spawn-shulkers-on-door"))
+            spawnShulkersOnDoor = config.getBoolean("spawn-shulkers-on-door");
+        else {
+            warnMissing("spawn-shulkers-on-door");
+            needToUpgrade = true;
+        }
+
         // Get hideBarriers
         if (config.contains("hide-barriers"))
             hideBarriers = config.getBoolean("hide-barriers");
@@ -287,6 +305,10 @@ public class Config {
                             shulkerCullDistanceComment +
                             "shulker-cull-distance: " +
                             shulkerCullDistance +
+                            "\n\n" +
+                            spawnShulkersOnDoorComment +
+                            "spawn-shulkers-on-door: " +
+                            spawnShulkersOnDoor +
                             "\n\n" +
                             hideBarriersComment +
                             "hide-barriers: " +
