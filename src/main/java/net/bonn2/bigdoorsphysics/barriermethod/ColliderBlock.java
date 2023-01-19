@@ -33,6 +33,7 @@ public class ColliderBlock {
         location.getWorld().getBlockAt(location).setBlockData(Material.BARRIER.createBlockData());
         if (Config.hideBarriers()) {
             // Hide block from distant players
+            // Todo: use protocol lib for this to optimize the packets
             for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
                 if (!player.getWorld().equals(location.getWorld())) continue;
                 double distance = location.distance(player.getLocation());
