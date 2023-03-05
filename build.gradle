@@ -28,6 +28,10 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT'
     compileOnly 'nl.pim16aap2:BigDoors:0.1.8.42'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.8.0'
+    implementation project(':versions')
+    implementation project(':versions:v1_17')
+    implementation project(':versions:v1_19')
+    implementation project(':versions:v1_19_3')
 }
 
 def targetJavaVersion = 17
@@ -47,4 +51,16 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
+}
+
+// Create a list of subprojects that you wish to include in the jar.
+def mainProjects = [':', ':versions', ':versions:v1_17', ':versions:v1_19', ':versions:v1_19_3']
+tasks.register('oneJar', Jar) {
+    dependsOn mainProjects.collect { it + ":compileJava" }
+
+    from files(mainProjects.collect { project(it).sourceSets.main.output })
+}
+
+tasks.named('build') {
+    dependsOn oneJar
 }

@@ -1,5 +1,7 @@
 package net.bonn2.bigdoorsphysics.util;
 
+import net.bonn2.bigdoorsphysics.versions.VersionUtil;
+
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -14,7 +16,7 @@ public enum CollisionMethod {
         }
 
         public static CollisionMethod getDefaultValue() {
-                if (VersionUtils.getMajorVersion() >= 19)
+                if (VersionUtil.getMajorVersion() >= 19)
                         return SHULKER;
                 else
                         return BARRIER;

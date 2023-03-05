@@ -1,7 +1,7 @@
 package net.bonn2.bigdoorsphysics.shulkermethod;
 
+import net.bonn2.bigdoorsphysics.BigDoorsPhysics;
 import net.bonn2.bigdoorsphysics.util.Config;
-import net.bonn2.bigdoorsphysics.util.VersionUtils;
 import net.kyori.adventure.text.Component;
 import nl.pim16aap2.bigDoors.reflection.BukkitReflectionUtil;
 import org.bukkit.Location;
@@ -93,7 +93,7 @@ public class ColliderShulker {
         Location newLocation = location.clone().subtract(0, SHULKER_OFFSET, 0);
         if (newLocation == location) return;
 
-        VersionUtils.teleportWithPassenger(armorStand, shulker, location.clone().subtract(0, SHULKER_OFFSET, 0));
+        BigDoorsPhysics.VERSION_UTIL.teleportWithPassenger(armorStand, shulker, location.clone().subtract(0, SHULKER_OFFSET, 0));
 
         if (Config.movePlayerWithShulker()) {
             for (Player player : location.getWorld().getPlayers()) {

@@ -10,6 +10,10 @@ import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerPacketEditor;
 import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import net.bonn2.bigdoorsphysics.util.ModrinthUpdateChecker;
+import net.bonn2.bigdoorsphysics.versions.VersionUtil;
+import net.bonn2.bigdoorsphysics.versions.v1_17.VersionUtil_v1_17;
+import net.bonn2.bigdoorsphysics.versions.v1_19.VersionUtil_v1_19;
+import net.bonn2.bigdoorsphysics.versions.v1_19_3.VersionUtil_v1_19_3;
 import nl.pim16aap2.bigDoors.BigDoors;
 import nl.pim16aap2.bigDoors.util.DoorType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class BigDoorsPhysics extends JavaPlugin {
 
     public static BigDoorsPhysics PLUGIN;
+    public static VersionUtil VERSION_UTIL;
 
     private BarrierListener barrierListener;
     private ShulkerListener shulkerListener;
@@ -33,6 +38,27 @@ public final class BigDoorsPhysics extends JavaPlugin {
             return;
         }
 
+        // Load the correct VersionUtil
+        String[] splitVersion = getServer().getMinecraftVersion().split("\\.");
+        if (Integer.parseInt(splitVersion[1]) < 19) {
+            VERSION_UTIL = new VersionUtil_v1_17();
+            getLogger().info("Loading in 1.17-1.18.2 mode");
+        } else {
+            if (new VersionUtil_v1_19_3().test()) {
+                VERSION_UTIL = new VersionUtil_v1_19_3();
+                getLogger().info("Loading in 1.19.3+ mode");
+            } else if (new VersionUtil_v1_19().test()){
+                VERSION_UTIL = new VersionUtil_v1_19();
+                getLogger().info("Loading in 1.19-1.19.3 mode");
+            } else {
+                getLogger().severe("Failed to load VersionUtil! This likely means the plugin needs an update to work on this minecraft version");
+                getLogger().severe("Please check for an update, and if none is available report this to bonn2.");
+                getPluginLoader().disablePlugin(this);
+                return;
+            }
+        }
+
+        // Load the config
         getLogger().info("Loading Config");
         Config.load();
 

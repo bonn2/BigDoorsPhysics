@@ -1,1 +1,9 @@
 rootProject.name = 'BigDoorsPhysics'
+include 'versions'
+include 'versions:v1_17'
+findProject(':versions:v1_17')?.name = 'v1_17'
+include 'versions:v1_19'
+findProject(':versions:v1_19')?.name = 'v1_19'
+include 'versions:v1_19_3'
+findProject(':versions:v1_19_3')?.name = 'v1_19_3'
+

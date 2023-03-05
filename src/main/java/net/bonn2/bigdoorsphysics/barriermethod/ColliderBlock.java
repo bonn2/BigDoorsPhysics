@@ -1,7 +1,6 @@
 package net.bonn2.bigdoorsphysics.barriermethod;
 
 import net.bonn2.bigdoorsphysics.util.Config;
-import net.bonn2.bigdoorsphysics.util.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -52,7 +51,7 @@ public class ColliderBlock {
                     location.getBlockY() + 1,
                     location.getBlockZ() + 1
             ).overlaps(player.getBoundingBox())
-            && !VersionUtils.isCollidable(location.getWorld().getBlockAt(location.add(direction)).getType())) {
+            && !location.getWorld().getBlockAt(location.add(direction)).getType().isCollidable()) {
                 player.teleport(player.getLocation().add(direction));
             }
         }
