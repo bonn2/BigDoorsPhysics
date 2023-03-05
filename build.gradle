@@ -1,37 +1,37 @@
-plugins {
-    id 'java'
-}
+allprojects {
+    apply plugin: 'java'
 
-group = 'net.bonn2'
-version = '2.3.1'
+    group = 'net.bonn2'
+    version = '2.3.1'
 
-repositories {
-    maven {
-        name = 'papermc-repo'
-        url = 'https://repo.papermc.io/repository/maven-public/'
-    }
-    maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
-    }
-    maven {
-        name = 'eldonexus'
-        url = 'https://eldonexus.de/repository/maven-public/'
-    }
-    maven {
-        name = 'dmulloy2-repo'
-        url = 'https://repo.dmulloy2.net/repository/public/'
+    repositories {
+        maven {
+            name = 'papermc-repo'
+            url = 'https://repo.papermc.io/repository/maven-public/'
+        }
+        maven {
+            name = 'sonatype'
+            url = 'https://oss.sonatype.org/content/groups/public/'
+        }
+        maven {
+            name = 'eldonexus'
+            url = 'https://eldonexus.de/repository/maven-public/'
+        }
+        maven {
+            name = 'dmulloy2-repo'
+            url = 'https://repo.dmulloy2.net/repository/public/'
+        }
     }
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT'
-    compileOnly 'nl.pim16aap2:BigDoors:0.1.8.42'
-    compileOnly 'com.comphenix.protocol:ProtocolLib:4.8.0'
     implementation project(':versions')
     implementation project(':versions:v1_17')
     implementation project(':versions:v1_19')
     implementation project(':versions:v1_19_3')
+    compileOnly 'io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT'
+    compileOnly 'nl.pim16aap2:BigDoors:0.1.8.42'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:4.8.0'
 }
 
 def targetJavaVersion = 17
@@ -53,7 +53,6 @@ processResources {
     }
 }
 
-// Create a list of subprojects that you wish to include in the jar.
 def mainProjects = [':', ':versions', ':versions:v1_17', ':versions:v1_19', ':versions:v1_19_3']
 tasks.register('oneJar', Jar) {
     dependsOn mainProjects.collect { it + ":compileJava" }
