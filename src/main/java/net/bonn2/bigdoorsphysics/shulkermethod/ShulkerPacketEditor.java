@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import net.bonn2.bigdoorsphysics.BigDoorsPhysics;
 import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import org.bukkit.entity.Entity;
@@ -29,6 +30,8 @@ public class ShulkerPacketEditor {
                             PacketType.Play.Server.SPAWN_ENTITY) {
                         @Override
                         public void onPacketSending(PacketEvent event) {
+                            // Check if any doors are moving
+                            if (BigDoorsPhysics.SHULKER_LISTENER.getColliders().keySet().size() == 0) return;
                             // Get uuid of the spawned entity
                             UUID uuid = event.getPacket().getUUIDs().read(0);
                             if (ColliderShulker.getOwnedUUIDs().contains(uuid)) {
@@ -48,6 +51,8 @@ public class ShulkerPacketEditor {
                             PacketType.Play.Server.ENTITY_TELEPORT) {
                         @Override
                         public void onPacketSending(PacketEvent event) {
+                            // Check if any doors are moving
+                            if (BigDoorsPhysics.SHULKER_LISTENER.getColliders().keySet().size() == 0) return;
                             // Get entity the packet is acting on
                             Entity entity = event.getPacket().getEntityModifier(event).getValues().get(0);
                             if (Objects.equals(entity, null)) return;
@@ -71,6 +76,8 @@ public class ShulkerPacketEditor {
                             PacketType.Play.Server.REL_ENTITY_MOVE) {
                         @Override
                         public void onPacketSending(PacketEvent event) {
+                            // Check if any doors are moving
+                            if (BigDoorsPhysics.SHULKER_LISTENER.getColliders().keySet().size() == 0) return;
                             // Get entity the packet is acting on
                             Entity entity = event.getPacket().getEntityModifier(event).getValues().get(0);
                             if (Objects.equals(entity, null)) return;

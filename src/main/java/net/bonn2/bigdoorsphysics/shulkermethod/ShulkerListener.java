@@ -88,6 +88,7 @@ public class ShulkerListener implements Listener {
 
     @EventHandler
     public void updateCollisions(ServerTickEndEvent tickEndEvent) {
+        if (COLLIDERS.keySet().size() == 0) return;
         for (long id : BLOCK_MOVERS.keySet()) {
             if (!Config.getCollisionMethod().getOrDefault(BLOCK_MOVERS.get(id).getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.SHULKER)) continue;
             // Get saved blocks

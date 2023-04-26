@@ -22,9 +22,8 @@ public final class BigDoorsPhysics extends JavaPlugin {
 
     public static BigDoorsPhysics PLUGIN;
     public static VersionUtil VERSION_UTIL;
-
-    private BarrierListener barrierListener;
-    private ShulkerListener shulkerListener;
+    public static BarrierListener BARRIER_LISTENER;
+    public static ShulkerListener SHULKER_LISTENER;
 
     @Override
     public void onEnable() {
@@ -68,12 +67,12 @@ public final class BigDoorsPhysics extends JavaPlugin {
         // Register Events
         getLogger().info("Registering Events");
         if (Config.getCollisionMethod().containsValue(CollisionMethod.BARRIER)) {
-            barrierListener = new BarrierListener();
-            getServer().getPluginManager().registerEvents(barrierListener, this);
+            BARRIER_LISTENER = new BarrierListener();
+            getServer().getPluginManager().registerEvents(BARRIER_LISTENER, this);
         }
         if (Config.getCollisionMethod().containsValue(CollisionMethod.SHULKER)) {
-            shulkerListener = new ShulkerListener();
-            getServer().getPluginManager().registerEvents(shulkerListener, this);
+            SHULKER_LISTENER = new ShulkerListener();
+            getServer().getPluginManager().registerEvents(SHULKER_LISTENER, this);
         }
 
         metrics.addCustomChart(new Metrics.SimplePie("door_method", () -> Config.getCollisionMethod().getOrDefault(DoorType.DOOR, CollisionMethod.NONE).name()));
@@ -100,16 +99,16 @@ public final class BigDoorsPhysics extends JavaPlugin {
     public void onDisable() {
         // Remove old barrier blocks
         getLogger().info("Removing leftover colliders");
-        if (barrierListener != null) {
-            for (Long id : barrierListener.getColliders().keySet()) {
-                for (ColliderBlock colliderBlock : barrierListener.getColliders().get(id)) {
+        if (BARRIER_LISTENER != null) {
+            for (Long id : BARRIER_LISTENER.getColliders().keySet()) {
+                for (ColliderBlock colliderBlock : BARRIER_LISTENER.getColliders().get(id)) {
                     colliderBlock.remove();
                 }
             }
         }
-        if (shulkerListener != null) {
-            for (Long id : shulkerListener.getColliders().keySet()) {
-                for (ColliderShulker colliderShulker : shulkerListener.getColliders().get(id)) {
+        if (SHULKER_LISTENER != null) {
+            for (Long id : SHULKER_LISTENER.getColliders().keySet()) {
+                for (ColliderShulker colliderShulker : SHULKER_LISTENER.getColliders().get(id)) {
                     colliderShulker.remove();
                 }
             }
