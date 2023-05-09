@@ -2,7 +2,7 @@ allprojects {
     apply plugin: 'java'
 
     group = 'net.bonn2'
-    version = '2.3.3'
+    version = '2.3.4'
 
     repositories {
         maven {
