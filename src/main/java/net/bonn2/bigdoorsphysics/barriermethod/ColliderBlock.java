@@ -51,8 +51,8 @@ public class ColliderBlock {
                     location.getBlockY() + 1,
                     location.getBlockZ() + 1
             ).overlaps(player.getBoundingBox())
-            && !location.getWorld().getBlockAt(location.add(direction)).getType().isCollidable()) {
-                player.teleport(player.getLocation().add(direction));
+            && !location.getWorld().getBlockAt(location.clone().add(direction)).getType().isCollidable()) {
+                player.teleport(player.getLocation().clone().add(direction));
             }
         }
     }
