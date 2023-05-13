@@ -31,7 +31,7 @@ dependencies {
     implementation project(':versions:v1_19_3')
     compileOnly 'io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT'
     compileOnly 'nl.pim16aap2:BigDoors:0.1.8.43'
-    compileOnly 'com.comphenix.protocol:ProtocolLib:4.8.0'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.0.0'
 }
 
 def targetJavaVersion = 17
