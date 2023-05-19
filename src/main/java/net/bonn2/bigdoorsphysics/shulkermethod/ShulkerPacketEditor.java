@@ -109,11 +109,7 @@ public class ShulkerPacketEditor {
                                 }
 
                                 // Send new packet
-                                try {
-                                    manager.sendServerPacket(event.getPlayer(), newPacket);
-                                } catch (InvocationTargetException e) {
-                                    throw new RuntimeException(e);
-                                }
+                                manager.sendServerPacket(event.getPlayer(), newPacket);
                             }
                         }
                     }
