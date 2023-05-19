@@ -24,7 +24,7 @@ public class ShulkerPacketEditor {
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
 
         // Hide shulker spawn packet
-        if (Config.spawnShulkersOnDoor()) {
+        if (Config.spawnShulkersOnDoor() && Config.getCollisionMethod().containsValue(CollisionMethod.SHULKER)) {
             manager.addPacketListener(
                     new PacketAdapter(PLUGIN, ListenerPriority.HIGHEST,
                             PacketType.Play.Server.SPAWN_ENTITY) {
