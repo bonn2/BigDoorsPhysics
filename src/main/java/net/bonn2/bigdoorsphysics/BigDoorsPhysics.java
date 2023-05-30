@@ -38,7 +38,6 @@ public final class BigDoorsPhysics extends JavaPlugin {
         }
 
         // Load the correct VersionUtil
-        System.out.println(VersionUtil.getMajorVersion());
         if (VersionUtil.getMajorVersion() < 19 || VersionUtil.isSpigot()) {
             VERSION_UTIL = new VersionUtil_v1_17();
             getLogger().info("Loading in 1.17-1.18.2 / Spigot mode");
