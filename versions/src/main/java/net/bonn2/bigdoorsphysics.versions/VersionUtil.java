@@ -23,4 +23,8 @@ public interface VersionUtil {
     static int getMajorVersion() {
         return Integer.parseInt(Bukkit.getVersion().split("\\.")[1]);
     }
+
+    static boolean isSpigot() {
+        return Bukkit.getVersion().toLowerCase().contains("spigot");
+    }
 }
