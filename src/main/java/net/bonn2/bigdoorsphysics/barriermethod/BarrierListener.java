@@ -1,6 +1,5 @@
 package net.bonn2.bigdoorsphysics.barriermethod;
 
-import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import nl.pim16aap2.bigDoors.BigDoors;
@@ -46,8 +45,7 @@ public class BarrierListener implements Listener {
         BLOCK_MOVERS.remove(endEvent.getDoor().getDoorUID());
     }
 
-    @EventHandler
-    public void updateCollisions(ServerTickEndEvent tickEndEvent) {
+    public void updateCollisions() {
         for (long id : BLOCK_MOVERS.keySet()) {
             if (!Config.getCollisionMethod().getOrDefault(BLOCK_MOVERS.get(id).getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.BARRIER)) return;
             // Get saved blocks
@@ -76,7 +74,7 @@ public class BarrierListener implements Listener {
                             direction = direction.add(0, 0, -1);
                     }
                     blocks.add(new ColliderBlock(
-                                doorBlock.getFBlock().getLocation().add(0, 0.1, 0).toCenterLocation(),
+                                doorBlock.getFBlock().getLocation().add(0, 0.1, 0).getBlock().getLocation().add(0.5, 0.5, 0.5),
                                 direction
                             ));
                     COLLIDERS.put(id, blocks);
@@ -90,7 +88,7 @@ public class BarrierListener implements Listener {
                 List<ColliderBlock> blocks = new ArrayList<>(doorBlocks.size());
                 for (MyBlockData doorBlock : doorBlocks) {
                     blocks.add(new ColliderBlock(
-                            doorBlock.getFBlock().getLocation().add(0, 0.1, 0).toBlockLocation(),
+                            doorBlock.getFBlock().getLocation().add(0, 0.1, 0).getBlock().getLocation(),
                             new Location(doorBlock.getFBlock().getLocation().getWorld(), 0, 0, 0)
                     ));
                     COLLIDERS.put(id, blocks);

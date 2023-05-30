@@ -2,7 +2,6 @@ package net.bonn2.bigdoorsphysics.shulkermethod;
 
 import net.bonn2.bigdoorsphysics.BigDoorsPhysics;
 import net.bonn2.bigdoorsphysics.util.Config;
-import net.kyori.adventure.text.Component;
 import nl.pim16aap2.bigDoors.reflection.BukkitReflectionUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
@@ -60,7 +59,7 @@ public class ColliderShulker {
         armorStand = spawnLocation.getWorld().spawn(adjustedSpwanLocation, ArmorStand.class, entity -> {
             ownedUUIDs.add(entity.getUniqueId());
             entity.setPersistent(true);
-            entity.customName(Component.text("BigDoorsPhysicsAS"));
+            entity.setCustomName("BigDoorsPhysicsAS");
             entity.setCustomNameVisible(false);
             entity.setGravity(false);
             entity.setBasePlate(false);
@@ -74,7 +73,7 @@ public class ColliderShulker {
         shulker = spawnLocation.getWorld().spawn(adjustedSpwanLocation, Shulker.class, entity -> {
             ownedUUIDs.add(entity.getUniqueId());
             entity.setPersistent(true);
-            entity.customName(Component.text("BigDoorsPhysicsS"));
+            entity.setCustomName("BigDoorsPhysicsS");
             entity.setPeek(0);
             entity.setAware(false);
             entity.setCustomNameVisible(false);
@@ -111,7 +110,7 @@ public class ColliderShulker {
         }
 
         if (Config.moveEntityWithShulker()) {
-            for (Entity entity : location.getNearbyEntities(3, 3, 3)) {
+            for (Entity entity : location.getWorld().getNearbyEntities(location, 3, 3, 3)) {
                 if (entity instanceof Player
                         || entity instanceof FallingBlock
                         || Objects.equals(entity.getCustomName(), "BigDoorsPhysicsS")

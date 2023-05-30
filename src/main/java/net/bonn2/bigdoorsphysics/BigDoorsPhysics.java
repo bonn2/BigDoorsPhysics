@@ -38,10 +38,10 @@ public final class BigDoorsPhysics extends JavaPlugin {
         }
 
         // Load the correct VersionUtil
-        String[] splitVersion = getServer().getMinecraftVersion().split("\\.");
-        if (Integer.parseInt(splitVersion[1]) < 19) {
+        System.out.println(VersionUtil.getMajorVersion());
+        if (VersionUtil.getMajorVersion() < 19 || VersionUtil.isSpigot()) {
             VERSION_UTIL = new VersionUtil_v1_17();
-            getLogger().info("Loading in 1.17-1.18.2 mode");
+            getLogger().info("Loading in 1.17-1.18.2 / Spigot mode");
         } else {
             if (new VersionUtil_v1_19_3().test()) {
                 VERSION_UTIL = new VersionUtil_v1_19_3();
@@ -69,10 +69,16 @@ public final class BigDoorsPhysics extends JavaPlugin {
         if (Config.getCollisionMethod().containsValue(CollisionMethod.BARRIER)) {
             BARRIER_LISTENER = new BarrierListener();
             getServer().getPluginManager().registerEvents(BARRIER_LISTENER, this);
+
+            // Start collisions updater
+            getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> BARRIER_LISTENER.updateCollisions(), 1, 1);
         }
         if (Config.getCollisionMethod().containsValue(CollisionMethod.SHULKER)) {
             SHULKER_LISTENER = new ShulkerListener();
             getServer().getPluginManager().registerEvents(SHULKER_LISTENER, this);
+
+            // Start collisions updater
+            getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> SHULKER_LISTENER.updateCollisions(), 1, 1);
         }
 
         metrics.addCustomChart(new Metrics.SimplePie("door_method", () -> Config.getCollisionMethod().getOrDefault(DoorType.DOOR, CollisionMethod.NONE).name()));
@@ -88,6 +94,12 @@ public final class BigDoorsPhysics extends JavaPlugin {
         if (getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
             getLogger().info("Enabling ProtocolLib Support");
             ShulkerPacketEditor.register();
+        }
+
+        // Spigot warning
+        if (VersionUtil.isSpigot() && VersionUtil.getMajorVersion() >= 19) {
+            getLogger().warning("You are running on Spigot in >= 1.19. Because of this the plugin will not function as smoothly as it could.");
+            getLogger().warning("It is highly recommended to use Paper or a Paper-Fork");
         }
 
         // Check for updates

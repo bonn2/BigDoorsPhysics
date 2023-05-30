@@ -16,9 +16,9 @@ public enum CollisionMethod {
         }
 
         public static CollisionMethod getDefaultValue() {
-                if (VersionUtil.getMajorVersion() >= 19)
-                        return SHULKER;
-                else
+                if (VersionUtil.getMajorVersion() <= 19 || VersionUtil.isSpigot())
                         return BARRIER;
+                else
+                        return SHULKER;
         }
 }

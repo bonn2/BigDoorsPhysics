@@ -1,6 +1,5 @@
 package net.bonn2.bigdoorsphysics.shulkermethod;
 
-import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import nl.pim16aap2.bigDoors.BigDoors;
@@ -60,7 +59,7 @@ public class ShulkerListener implements Listener {
 
             if (Config.moveEntityWithShulker() && Config.correctEndingClipping()) {
                 for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
-                    for (Entity entity : block.getLocation().getNearbyEntities(2, 2, 2)) {
+                    for (Entity entity : block.getLocation().getWorld().getNearbyEntities(block.getLocation(), 2, 2, 2)) {
                         if (entity instanceof Player
                                 || entity instanceof FallingBlock
                                 || Objects.equals(entity.getCustomName(), "BigDoorsPhysicsS")
@@ -86,8 +85,7 @@ public class ShulkerListener implements Listener {
         BLOCK_MOVERS.remove(endEvent.getDoor().getDoorUID());
     }
 
-    @EventHandler
-    public void updateCollisions(ServerTickEndEvent tickEndEvent) {
+    public void updateCollisions() {
         for (long id : BLOCK_MOVERS.keySet()) {
             if (!Config.getCollisionMethod().getOrDefault(BLOCK_MOVERS.get(id).getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.SHULKER)) continue;
             // Get saved blocks
