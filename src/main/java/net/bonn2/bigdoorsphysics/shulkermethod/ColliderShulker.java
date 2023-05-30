@@ -110,7 +110,7 @@ public class ColliderShulker {
         }
 
         if (Config.moveEntityWithShulker()) {
-            for (Entity entity : location.getNearbyEntities(3, 3, 3)) {
+            for (Entity entity : location.getWorld().getNearbyEntities(location, 3, 3, 3)) {
                 if (entity instanceof Player
                         || entity instanceof FallingBlock
                         || Objects.equals(entity.getCustomName(), "BigDoorsPhysicsS")
