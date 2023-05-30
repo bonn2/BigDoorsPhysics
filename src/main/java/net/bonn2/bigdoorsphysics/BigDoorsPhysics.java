@@ -69,10 +69,16 @@ public final class BigDoorsPhysics extends JavaPlugin {
         if (Config.getCollisionMethod().containsValue(CollisionMethod.BARRIER)) {
             BARRIER_LISTENER = new BarrierListener();
             getServer().getPluginManager().registerEvents(BARRIER_LISTENER, this);
+
+            // Start collisions updater
+            getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> BARRIER_LISTENER.updateCollisions(), 1, 1);
         }
         if (Config.getCollisionMethod().containsValue(CollisionMethod.SHULKER)) {
             SHULKER_LISTENER = new ShulkerListener();
             getServer().getPluginManager().registerEvents(SHULKER_LISTENER, this);
+
+            // Start collisions updater
+            getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> SHULKER_LISTENER.updateCollisions(), 1, 1);
         }
 
         metrics.addCustomChart(new Metrics.SimplePie("door_method", () -> Config.getCollisionMethod().getOrDefault(DoorType.DOOR, CollisionMethod.NONE).name()));
