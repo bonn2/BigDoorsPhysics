@@ -29,6 +29,7 @@ dependencies {
     implementation project(':versions:v1_17')
     implementation project(':versions:v1_19')
     implementation project(':versions:v1_19_3')
+    implementation 'org.jetbrains:annotations:24.0.0'
     compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
     compileOnly 'nl.pim16aap2:BigDoors:0.1.8.43'
     compileOnly 'com.comphenix.protocol:ProtocolLib:5.0.0'
