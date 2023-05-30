@@ -59,7 +59,7 @@ public class ShulkerListener implements Listener {
 
             if (Config.moveEntityWithShulker() && Config.correctEndingClipping()) {
                 for (ColliderShulker block : COLLIDERS.get(endEvent.getDoor().getDoorUID())) {
-                    for (Entity entity : block.getLocation().getNearbyEntities(2, 2, 2)) {
+                    for (Entity entity : block.getLocation().getWorld().getNearbyEntities(block.getLocation(), 2, 2, 2)) {
                         if (entity instanceof Player
                                 || entity instanceof FallingBlock
                                 || Objects.equals(entity.getCustomName(), "BigDoorsPhysicsS")
