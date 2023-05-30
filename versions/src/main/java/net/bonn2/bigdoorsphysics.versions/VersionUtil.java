@@ -21,6 +21,6 @@ public interface VersionUtil {
     void teleportWithPassenger(Entity entity, Entity passenger, Location location);
 
     static int getMajorVersion() {
-        return Integer.parseInt(Bukkit.getServer().getMinecraftVersion().split("\\.")[1]);
+        return Integer.parseInt(Bukkit.getVersion().split("\\.")[1]);
     }
 }

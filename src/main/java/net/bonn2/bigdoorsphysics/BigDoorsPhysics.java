@@ -38,7 +38,8 @@ public final class BigDoorsPhysics extends JavaPlugin {
         }
 
         // Load the correct VersionUtil
-        String[] splitVersion = getServer().getMinecraftVersion().split("\\.");
+        String[] splitVersion = getServer().getVersion().split("\\.");
+        System.out.println(splitVersion[1]);
         if (Integer.parseInt(splitVersion[1]) < 19) {
             VERSION_UTIL = new VersionUtil_v1_17();
             getLogger().info("Loading in 1.17-1.18.2 mode");
