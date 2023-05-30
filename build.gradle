@@ -6,6 +6,10 @@ allprojects {
 
     repositories {
         maven {
+            name 'spigot'
+            url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        }
+        maven {
             name = 'papermc-repo'
             url = 'https://repo.papermc.io/repository/maven-public/'
         }
