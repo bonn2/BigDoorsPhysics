@@ -74,7 +74,7 @@ public class BarrierListener implements Listener {
                             direction = direction.add(0, 0, -1);
                     }
                     blocks.add(new ColliderBlock(
-                                doorBlock.getFBlock().getLocation().add(0, 0.1, 0).toCenterLocation(),
+                                doorBlock.getFBlock().getLocation().add(0, 0.1, 0).getBlock().getLocation().add(0.5, 0.5, 0.5),
                                 direction
                             ));
                     COLLIDERS.put(id, blocks);
@@ -88,7 +88,7 @@ public class BarrierListener implements Listener {
                 List<ColliderBlock> blocks = new ArrayList<>(doorBlocks.size());
                 for (MyBlockData doorBlock : doorBlocks) {
                     blocks.add(new ColliderBlock(
-                            doorBlock.getFBlock().getLocation().add(0, 0.1, 0).toBlockLocation(),
+                            doorBlock.getFBlock().getLocation().add(0, 0.1, 0).getBlock().getLocation(),
                             new Location(doorBlock.getFBlock().getLocation().getWorld(), 0, 0, 0)
                     ));
                     COLLIDERS.put(id, blocks);
