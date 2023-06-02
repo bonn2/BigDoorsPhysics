@@ -12,7 +12,6 @@ import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import org.bukkit.entity.Entity;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.UUID;
 
