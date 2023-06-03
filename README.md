@@ -3,7 +3,7 @@
 This plugin aims to add collisions to the spigot plugin [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) through several methods.
 
 ## Requirements
-- [Paper](https://papermc.io/) >= 1.17
+- [Paper](https://papermc.io/) >= 1.16.5
 - [BigDoors](https://www.spigotmc.org/resources/big-doors.58669/) >= 0.1.8.42
 - **Optional** [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/)
 ## The methods
