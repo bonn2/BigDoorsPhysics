@@ -42,7 +42,8 @@ public final class BigDoorsPhysics extends JavaPlugin {
         // Get compatible VersionUtil
         VERSION_UTIL = VersionUtilProvider.getVersionUtil();
         if (VERSION_UTIL == null) {
-            getLogger().warning("Could not find a compatible VersionUtil. Please report this to bonn2");
+            getLogger().severe("Failed to load VersionUtil! This likely means the plugin needs an update to work on this minecraft version");
+            getLogger().severe("Please check for an update, and if none are available report this to bonn2.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
