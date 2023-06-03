@@ -11,9 +11,7 @@ import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import net.bonn2.bigdoorsphysics.util.ModrinthUpdateChecker;
 import net.bonn2.bigdoorsphysics.versions.VersionUtil;
-import net.bonn2.bigdoorsphysics.versions.v1_17.VersionUtil_v1_17;
-import net.bonn2.bigdoorsphysics.versions.v1_19.VersionUtil_v1_19;
-import net.bonn2.bigdoorsphysics.versions.v1_19_3.VersionUtil_v1_19_3;
+import net.bonn2.bigdoorsphysics.versions.VersionUtilProvider;
 import nl.pim16aap2.bigDoors.BigDoors;
 import nl.pim16aap2.bigDoors.util.DoorType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,28 +35,17 @@ public final class BigDoorsPhysics extends JavaPlugin {
             return;
         }
 
-        // Load the correct VersionUtil
-        if (VersionUtil.getMajorVersion() < 19 || VersionUtil.isSpigot()) {
-            VERSION_UTIL = new VersionUtil_v1_17();
-            getLogger().info("Loading in 1.17-1.18.2 / Spigot mode");
-        } else {
-            if (new VersionUtil_v1_19_3().test()) {
-                VERSION_UTIL = new VersionUtil_v1_19_3();
-                getLogger().info("Loading in 1.19.3+ mode");
-            } else if (new VersionUtil_v1_19().test()){
-                VERSION_UTIL = new VersionUtil_v1_19();
-                getLogger().info("Loading in 1.19-1.19.3 mode");
-            } else {
-                getLogger().severe("Failed to load VersionUtil! This likely means the plugin needs an update to work on this minecraft version");
-                getLogger().severe("Please check for an update, and if none is available report this to bonn2.");
-                getPluginLoader().disablePlugin(this);
-                return;
-            }
-        }
-
         // Load the config
         getLogger().info("Loading Config");
         Config.load();
+
+        // Get compatible VersionUtil
+        VERSION_UTIL = VersionUtilProvider.getVersionUtil();
+        if (VERSION_UTIL == null) {
+            getLogger().warning("Could not find a compatible VersionUtil. Please report this to bonn2");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         // Enable metrics
         Metrics metrics = new Metrics(this, 17236);
@@ -97,7 +84,7 @@ public final class BigDoorsPhysics extends JavaPlugin {
 
         // Spigot warning
         if (VersionUtil.isSpigot() && VersionUtil.getMajorVersion() >= 19) {
-            getLogger().warning("You are running on Spigot in >= 1.19. Because of this the plugin will not function as smoothly as it could.");
+            getLogger().warning("You are running Spigot on >= 1.19. Because of this the plugin will not function as smoothly as it could.");
             getLogger().warning("It is highly recommended to use Paper or a Paper-Fork");
         }
 

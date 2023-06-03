@@ -1,7 +1,7 @@
 name: BigDoorsPhysics
 version: '${version}'
 main: net.bonn2.bigdoorsphysics.BigDoorsPhysics
-api-version: 1.17
+api-version: 1.16
 depend: [ BigDoors ]
 softdepend: [ ProtocolLib ]
 authors: [ bonn2 ]

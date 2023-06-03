@@ -1,3 +1,7 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
 allprojects {
     apply plugin: 'java'
 
@@ -5,6 +9,7 @@ allprojects {
     version = '2.3.5'
 
     repositories {
+        mavenCentral()
         maven {
             name 'spigot'
             url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
@@ -30,23 +35,16 @@ allprojects {
 
 dependencies {
     implementation project(':versions')
-    implementation project(':versions:v1_17')
-    implementation project(':versions:v1_19')
-    implementation project(':versions:v1_19_3')
-    implementation 'org.jetbrains:annotations:24.0.1'
-    compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
+    implementation 'org.jetbrains:annotations:24.0.0'
+    shadow 'org.reflections:reflections:0.10.2'
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     compileOnly 'nl.pim16aap2:BigDoors:0.1.8.43'
     compileOnly 'com.comphenix.protocol:ProtocolLib:5.0.0'
 }
 
-def targetJavaVersion = 17
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
+    sourceCompatibility = "16"
+    targetCompatibility = "16"
 }
 
 processResources {
@@ -58,13 +56,31 @@ processResources {
     }
 }
 
-def mainProjects = [':', ':versions', ':versions:v1_17', ':versions:v1_19', ':versions:v1_19_3']
+def mainProjects = [':', ':versions', ':versions:v1_16', ':versions:v1_19', ':versions:v1_19_3']
 tasks.register('oneJar', Jar) {
+    archiveClassifier = 'versioned'
     dependsOn mainProjects.collect { it + ":compileJava" }
 
     from files(mainProjects.collect { project(it).sourceSets.main.output })
 }
 
+shadowJar {
+    archiveClassifier = 'shadowed'
+    exclude 'javax/**', 'org/jetbrains/**', 'org/slf4j/**'
+    relocate 'org.reflections', 'net.bonn2.bigdoorsphysics.relocated.org.reflections'
+    relocate 'javassist', 'net.bonn2.bigdoorsphysics.relocated.javassist'
+    minimize()
+}
+
+tasks.register('mergeJars',  Jar) {
+    dependsOn 'shadowJar', 'oneJar'
+
+    duplicatesStrategy = 'exclude'
+    from zipTree(shadowJar.archivePath)
+    from zipTree(oneJar.archivePath)
+    archiveClassifier = ''
+}
+
 tasks.named('build') {
-    dependsOn oneJar
+    finalizedBy mergeJars
 }

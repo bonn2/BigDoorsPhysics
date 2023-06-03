@@ -1,10 +1,10 @@
-package net.bonn2.bigdoorsphysics.versions.v1_17;
+package net.bonn2.bigdoorsphysics.versions.v1_16;
 
 import net.bonn2.bigdoorsphysics.versions.VersionUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-public class VersionUtil_v1_17 implements VersionUtil {
+public class VersionUtil_v1_16 implements VersionUtil {
 
     @Override
     public boolean test() {

@@ -2,3 +2,9 @@ dependencies {
     compileOnly project(path: ':versions')
     compileOnly 'io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT'
 }
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
