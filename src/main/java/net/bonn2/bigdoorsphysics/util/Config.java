@@ -27,80 +27,60 @@ public class Config {
     static boolean checkForUpdates = true;
 
     static String collisionMethodComment =
-            """
-            # How the plugin should create the colliders
-            # Valid options: BARRIER, SHULKER, NONE
-            # Any invalid selection will be set to the default for your version
-            """;
+            "# How the plugin should create the colliders\n" +
+            "# Valid options: BARRIER, SHULKER, NONE\n" +
+            "# Any invalid selection will be set to the default for your version\n";
 
     static String movePlayerWithShulkerComment =
-            """
-            ### Shulker Options
-            
-            # Make the player move with the shulker, this only has an effect when the shulker and player clip into one another.
-            # It will not have an effect when the shulker and player are not clipped into each other
-            # Potential tps impact on larger player and door counts
-            """;
+            "### Shulker Options\n" +
+            "\n" +
+            "# Make the player move with the shulker, this only has an effect when the shulker and player clip into one another.\n" +
+            "# It will not have an effect when the shulker and player are not clipped into each other\n" +
+            "# Potential tps impact on larger player and door counts\n";
 
     static String moveEntityWithShulkerComment =
-            """
-            # Make all non-player entities move with the shulker, this only has an effect when the shulker and entity clip into one another.
-            # It will not have an effect when the shulker and entity are not clipped into each other
-            # Larger performance impact than with players, due to the usually larger amount of entities on a server
-            """;
+            "# Make all non-player entities move with the shulker, this only has an effect when the shulker and entity clip into one another.\n" +
+            "# It will not have an effect when the shulker and entity are not clipped into each other\n" +
+            "# Larger performance impact than with players, due to the usually larger amount of entities on a server\n";
 
     static String correctEndingClippingComment =
-            """
-            # Verify that the moved entity is not clipping into the door when it finishes moving
-            # If a entity is standing on top of a door when it finishes moving they will be
-            # teleported up a small amount to prevent them from falling through the door
-            # This will only apply to entities / players if they are enabled above
-            # This should have a minimal performance impact
-            """;
+            "# Verify that the moved entity is not clipping into the door when it finishes moving\n" +
+            "# If a entity is standing on top of a door when it finishes moving they will be\n" +
+            "# teleported up a small amount to prevent them from falling through the door\n" +
+            "# This will only apply to entities / players if they are enabled above\n" +
+            "# This should have a minimal performance impact\n";
 
     static String cullDistantShulkersComment =
-            """
-            # Hide shulkers that are far away from the player
-            # NOTE: This requires ProtocolLib to work
-            """;
+            "# Hide shulkers that are far away from the player\n" +
+            "# NOTE: This requires ProtocolLib to work\n";
 
     static String shulkerCullDistanceComment =
-            """
-            # How many blocks away a shulker needs to be to be culled
-            # Set to number less than 0 to always cull shulkers
-            # NOTE: If player interacts will culled shulker it will behave similarly to a ghost block
-            """;
+            "# How many blocks away a shulker needs to be to be culled\n" +
+            "# Set to number less than 0 to always cull shulkers\n" +
+            "# NOTE: If player interacts will culled shulker it will behave similarly to a ghost block\n";
 
     static String spawnShulkersOnDoorComment =
-            """
-            # If shulkers should be spawned on the door, or far away
-            # When this is set to true the shulkers will be spawned near their final locations
-            # When this is set to false the shulkers will be spawned ~100k blocks above the world height to hide them while they are being set up
-            # Enabling this can help with compatibility with region plugins (Specifically if you are using regions to control mob spawning)
-            # By default this is enabled if ProtocolLib is on the server and shulkers will instead be hidden during setup using packets
-            """;
+            "# If shulkers should be spawned on the door, or far away\n" +
+            "# When this is set to true the shulkers will be spawned near their final locations\n" +
+            "# When this is set to false the shulkers will be spawned ~100k blocks above the world height to hide them while they are being set up\n" +
+            "# Enabling this can help with compatibility with region plugins (Specifically if you are using regions to control mob spawning)\n" +
+            "# By default this is enabled if ProtocolLib is on the server and shulkers will instead be hidden during setup using packets\n";
 
     static String hideBarriersComment =
-            """
-            ### Barrier Options
-
-            # Use extra packets to hide barriers when they are far away
-            # This may have a medium performance impact, primarily fps
-            """;
+            "### Barrier Options\n" +
+            "\n" +
+            "# Use extra packets to hide barriers when they are far away\n" +
+            "# This may have a medium performance impact, primarily fps\n";
 
     static String movePlayerWithBarrierComment =
-            """
-            # Move players who are near the door in accordance with the direction of the door
-            # This may have a small performance impact, primarily tps
-            """;
+            "# Move players who are near the door in accordance with the direction of the door\n" +
+            "# This may have a small performance impact, primarily tps\n";
 
     static String checkForUpdatesComment =
-            """
-            ### Other Options
-            
-            # Whether or not to check for updates via https://modrinth.com/
-            # Updates will only be checked for on startup
-            """;
+            "### Other Options\n" +
+            "\n" +
+            "# Whether or not to check for updates via https://modrinth.com/\n" +
+            "# Updates will only be checked for on startup\n";
 
     public static void load() {
         YamlConfiguration config = new YamlConfiguration();
@@ -138,21 +118,21 @@ public class Config {
             }
             else {
                 switch (methodConfig.toUpperCase()) {
-                    case "BARRIER" -> {
+                    case "BARRIER":
                         collisionMethod.put(DoorType.DOOR, CollisionMethod.BARRIER);
                         collisionMethod.put(DoorType.DRAWBRIDGE, CollisionMethod.BARRIER);
                         collisionMethod.put(DoorType.PORTCULLIS, CollisionMethod.BARRIER);
                         collisionMethod.put(DoorType.SLIDINGDOOR, CollisionMethod.BARRIER);
                         needToUpgrade = true;
-                    }
-                    case "SHULKER" -> {
+                        break;
+                    case "SHULKER":
                         collisionMethod.put(DoorType.DOOR, CollisionMethod.SHULKER);
                         collisionMethod.put(DoorType.DRAWBRIDGE, CollisionMethod.SHULKER);
                         collisionMethod.put(DoorType.PORTCULLIS, CollisionMethod.SHULKER);
                         collisionMethod.put(DoorType.SLIDINGDOOR, CollisionMethod.SHULKER);
                         needToUpgrade = true;
-                    }
-                    default -> {
+                        break;
+                    default:
                         collisionMethod.put(DoorType.DOOR, CollisionMethod.safeValueOf(config.getString("method.door", CollisionMethod.getDefaultValue().name())));
                         collisionMethod.put(DoorType.DRAWBRIDGE, CollisionMethod.safeValueOf(config.getString("method.drawbridge", CollisionMethod.getDefaultValue().name())));
                         collisionMethod.put(DoorType.PORTCULLIS, CollisionMethod.safeValueOf(config.getString("method.portcullis", CollisionMethod.getDefaultValue().name())));
@@ -163,7 +143,7 @@ public class Config {
                                 && config.contains("method.sliding"))) {
                             needToUpgrade = true;
                         }
-                    }
+                        break;
                 }
             }
         } else {
