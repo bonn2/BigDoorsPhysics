@@ -3,6 +3,7 @@ package net.bonn2.bigdoorsphysics.versions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 
 public interface VersionUtil {
 
@@ -19,6 +20,8 @@ public interface VersionUtil {
      * @param location  The location to teleport the bottom entity.
      */
     void teleportWithPassenger(Entity entity, Entity passenger, Location location);
+
+    void setEntityInvisible(LivingEntity entity);
 
     static int getMajorVersion() {
         return Integer.parseInt(Bukkit.getVersion().split("\\.")[1]);
