@@ -25,7 +25,7 @@ public class ModrinthUpdateChecker {
             public void run() {
                 try {
                     // Get the latest version from modrinth
-                    URL url = new URL("https://api.modrinth.com/v2/project/%s/version".formatted(SLUG));
+                    URL url = new URL("https://api.modrinth.com/v2/project/" + SLUG + "/version");
                     HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                     connection.setRequestProperty("get", "application/json");
                     InputStream responseStream = connection.getInputStream();
@@ -46,13 +46,15 @@ public class ModrinthUpdateChecker {
                     if (latestVersion.get(0) > currentVersion.get(0)
                             || (latestVersion.get(1) > currentVersion.get(1) && Objects.equals(latestVersion.get(0), currentVersion.get(0)))
                             || (latestVersion.get(2) > currentVersion.get(2) && Objects.equals(latestVersion.get(0), currentVersion.get(0)) && Objects.equals(latestVersion.get(1), currentVersion.get(1)))) {
-                        plugin.getLogger().warning("An update is available %s -> %s".formatted(plugin.getDescription().getVersion(), latestVersionJson.get("version_number").getAsString()));
-                        plugin.getLogger().warning("Latest Changelog:\n%s\n%s\n\nGet it here: https://modrinth.com/plugin/%s/version/%s".formatted(
-                                        latestVersionJson.get("name").getAsString(),
-                                        latestVersionJson.get("changelog").getAsString(),
-                                        SLUG,
-                                        latestVersionJson.get("version_number").getAsString()
-                                )
+                        plugin.getLogger().warning("An update is available " + plugin.getDescription().getVersion() + " -> " + latestVersionJson.get("version_number").getAsString());
+                        plugin.getLogger().warning("Latest Changelog:\n" +
+                                latestVersionJson.get("name").getAsString() +
+                                "\n" +
+                                latestVersionJson.get("changelog").getAsString() +
+                                "\n\nGet it here: https://modrinth.com/plugin/"
+                                + SLUG +
+                                "/version/" +
+                                latestVersionJson.get("version_number").getAsString()
                         );
                     }
                 } catch (IOException exception) {
