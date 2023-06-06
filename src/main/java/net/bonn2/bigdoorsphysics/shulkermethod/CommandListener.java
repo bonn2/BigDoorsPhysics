@@ -45,7 +45,7 @@ public class CommandListener implements CommandExecutor {
                 }
             }
         }
-        sender.sendMessage("Removed %s entities!".formatted(count));
+        sender.sendMessage("Removed " + count + " entities!");
         return true;
     }
 }
