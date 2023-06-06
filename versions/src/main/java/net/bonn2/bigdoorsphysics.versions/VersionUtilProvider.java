@@ -18,7 +18,11 @@ public class VersionUtilProvider {
 
     public static @Nullable VersionUtil getVersionUtil() {
         if (VERSION_UTIL != null) return VERSION_UTIL;
-        Reflections reflections = new Reflections("net.bonn2.bigdoorsphysics.versions");
+        Reflections reflections;
+        if (Runtime.version().feature() < 16)
+            reflections = new Reflections("net.bonn2.bigdoorsphysics.versions.v1_16_3");
+        else
+            reflections = new Reflections("net.bonn2.bigdoorsphysics.versions");
         Set<Class<? extends VersionUtil>> classes = reflections.getSubTypesOf(VersionUtil.class);
         logger.info("Discovered " + classes.size() + " version adapters");
 
