@@ -1,4 +1,4 @@
-package net.bonn2.bigdoorsphysics.versions.v1_16_3;
+package net.bonn2.bigdoorsphysics.versions.j11.v1_16_3;
 
 import net.bonn2.bigdoorsphysics.versions.VersionUtil;
 import org.bukkit.Location;
