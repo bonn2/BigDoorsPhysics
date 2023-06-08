@@ -24,7 +24,7 @@ public interface VersionUtil {
     void setEntityInvisible(LivingEntity entity);
 
     static int getMajorVersion() {
-        return Integer.parseInt(Bukkit.getVersion().split("\\.")[1]);
+        return Integer.parseInt(Bukkit.getVersion().split("\\.")[1].replace(")", ""));
     }
 
     static boolean isSpigot() {
