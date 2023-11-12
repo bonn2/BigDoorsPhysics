@@ -4,7 +4,10 @@ import nl.pim16aap2.bigDoors.util.DoorType;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +25,7 @@ public class Config {
     static boolean cullDistantShulkers = true;
     static int shulkerCullDistance = 4;
     static boolean spawnShulkersOnDoor = PLUGIN.getServer().getPluginManager().isPluginEnabled("ProtocolLib");
+    static boolean removeShulkersOnChunkLoad = false;
     static boolean hideBarriers = true;
     static boolean movePlayerWithBarrier = true;
     static boolean checkForUpdates = true;
@@ -65,6 +69,11 @@ public class Config {
             "# When this is set to false the shulkers will be spawned ~100k blocks above the world height to hide them while they are being set up\n" +
             "# Enabling this can help with compatibility with region plugins (Specifically if you are using regions to control mob spawning)\n" +
             "# By default this is enabled if ProtocolLib is on the server and shulkers will instead be hidden during setup using packets\n";
+
+    static String removeShulkersOnChunkLoadComment =
+            "# This setting will check for leftover shulkers whenever a chunk loads\n" +
+            "# ONLY enable this setting if you have to run /killbigdoorsphysicsentities frequently\n" +
+            "it may have a minor performance impact if your server has a lot of entities\n";
 
     static String hideBarriersComment =
             "### Barrier Options\n" +
@@ -203,6 +212,14 @@ public class Config {
             needToUpgrade = true;
         }
 
+        // Get removeShulkersOnChunkLoad
+        if (config.contains("remove-shulkers-on-chunk-load"))
+            removeShulkersOnChunkLoad = config.getBoolean("remove-shulkers-on-chunk-load");
+        else {
+            warnMissing("remove-shulkers-on-chunk-load");
+            needToUpgrade = true;
+        }
+
         // Get hideBarriers
         if (config.contains("hide-barriers"))
             hideBarriers = config.getBoolean("hide-barriers");
@@ -290,6 +307,10 @@ public class Config {
                             "spawn-shulkers-on-door: " +
                             spawnShulkersOnDoor +
                             "\n\n" +
+                            removeShulkersOnChunkLoadComment +
+                            "remove-shulkers-on-chunk-load: " +
+                            removeShulkersOnChunkLoad +
+                            "\n\n" +
                             hideBarriersComment +
                             "hide-barriers: " +
                             hideBarriers +
@@ -334,6 +355,10 @@ public class Config {
 
     public static boolean spawnShulkersOnDoor() {
         return spawnShulkersOnDoor;
+    }
+
+    public static boolean removeShulkersOnChunkLoad() {
+        return removeShulkersOnChunkLoad;
     }
 
     public static boolean hideBarriers() {
