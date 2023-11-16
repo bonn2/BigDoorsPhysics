@@ -46,28 +46,42 @@ public final class BigDoorsPhysics extends JavaPlugin {
             return;
         }
 
+        // Notify of detailed logging
+        if (Config.detailedLogging()) {
+            getLogger().info("More detailed logging is enabled, expect console spam");
+            getLogger().info("You can disable this in ~/plugins/BigDoorsPhysics/config.yml -> detailed-logging -> false");
+        }
+
         // Enable metrics
         Metrics metrics = new Metrics(this, 17236);
 
         // Register Events
         getLogger().info("Registering Events");
         if (Config.getCollisionMethod().containsValue(CollisionMethod.BARRIER)) {
+            if (Config.detailedLogging()) getLogger().info("Loading BarrierListener...");
             BARRIER_LISTENER = new BarrierListener();
             getServer().getPluginManager().registerEvents(BARRIER_LISTENER, this);
+            if (Config.detailedLogging()) getLogger().info("Loaded!");
 
             // Start collisions updater
+            if (Config.detailedLogging()) getLogger().info("Starting repeating barrier collisions task");
             getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> BARRIER_LISTENER.updateCollisions(), 1, 1);
         }
         if (Config.getCollisionMethod().containsValue(CollisionMethod.SHULKER)) {
+            if (Config.detailedLogging()) getLogger().info("Loading ShulkerListener...");
             SHULKER_LISTENER = new ShulkerListener();
             getServer().getPluginManager().registerEvents(SHULKER_LISTENER, this);
+            if (Config.detailedLogging()) getLogger().info("Loaded!");
 
             // Start collisions updater
+            if (Config.detailedLogging()) getLogger().info("Starting repeating shulker collisions task");
             getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> SHULKER_LISTENER.updateCollisions(), 1, 1);
 
             if (Config.removeShulkersOnChunkLoad()) {
+                if (Config.detailedLogging()) getLogger().info("Loading shulker cleanup listener...");
                 CHUNK_LOAD_LISTENER = new ChunkLoadListener();
                 getServer().getPluginManager().registerEvents(CHUNK_LOAD_LISTENER, this);
+                if (Config.detailedLogging()) getLogger().info("Loaded!");
             }
         }
 
