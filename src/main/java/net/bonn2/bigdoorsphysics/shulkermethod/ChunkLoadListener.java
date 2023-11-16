@@ -30,7 +30,7 @@ public class ChunkLoadListener implements Listener {
                 count++;
             }
         }
-        if (count > 0)
+        if (count > 0 && Config.detailedLogging())
             BigDoorsPhysics.PLUGIN.getLogger().info("Cleaned up " + count + " physics entities in chunk " + event.getChunk().getX() + " " + event.getChunk().getZ());
     }
 }

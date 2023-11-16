@@ -29,6 +29,7 @@ public class Config {
     static boolean hideBarriers = true;
     static boolean movePlayerWithBarrier = true;
     static boolean checkForUpdates = true;
+    static boolean detailedLogging = false;
 
     static String collisionMethodComment =
             "# How the plugin should create the colliders\n" +
@@ -90,6 +91,9 @@ public class Config {
             "\n" +
             "# Whether or not to check for updates via https://modrinth.com/\n" +
             "# Updates will only be checked for on startup\n";
+
+    static String detailedLoggingComment =
+            "# Enable more detailed logging for debugging\n";
 
     public static void load() {
         YamlConfiguration config = new YamlConfiguration();
@@ -249,6 +253,14 @@ public class Config {
             needToUpgrade = true;
         }
 
+        // Get detailedLogging
+        if (config.contains("detailed-logging")) {
+            detailedLogging = config.getBoolean("detailed-logging");
+        } else {
+            warnMissing("detailed-logging");
+            needToUpgrade = true;
+        }
+
         // Write updated config if necessary
         if (needToUpgrade) write();
     }
@@ -322,6 +334,10 @@ public class Config {
                             checkForUpdatesComment +
                             "check-for-updates: " +
                             checkForUpdates +
+                            "\n\n" +
+                            detailedLoggingComment +
+                            "detailed-logging: " +
+                            detailedLogging +
                             "\n";
             output.write(builder.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
@@ -371,5 +387,9 @@ public class Config {
 
     public static boolean checkForUpdates() {
         return checkForUpdates;
+    }
+
+    public static boolean detailedLogging() {
+        return detailedLogging;
     }
 }
