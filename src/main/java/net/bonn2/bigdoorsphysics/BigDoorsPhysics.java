@@ -3,10 +3,7 @@ package net.bonn2.bigdoorsphysics;
 import net.bonn2.bigdoorsphysics.barriermethod.BarrierListener;
 import net.bonn2.bigdoorsphysics.barriermethod.ColliderBlock;
 import net.bonn2.bigdoorsphysics.bstats.Metrics;
-import net.bonn2.bigdoorsphysics.shulkermethod.ColliderShulker;
-import net.bonn2.bigdoorsphysics.shulkermethod.CommandListener;
-import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerListener;
-import net.bonn2.bigdoorsphysics.shulkermethod.ShulkerPacketEditor;
+import net.bonn2.bigdoorsphysics.shulkermethod.*;
 import net.bonn2.bigdoorsphysics.util.CollisionMethod;
 import net.bonn2.bigdoorsphysics.util.Config;
 import net.bonn2.bigdoorsphysics.util.ModrinthUpdateChecker;
@@ -22,6 +19,7 @@ public final class BigDoorsPhysics extends JavaPlugin {
     public static VersionUtil VERSION_UTIL;
     public static BarrierListener BARRIER_LISTENER;
     public static ShulkerListener SHULKER_LISTENER;
+    public static ChunkLoadListener CHUNK_LOAD_LISTENER;
 
     @Override
     public void onEnable() {
@@ -66,6 +64,11 @@ public final class BigDoorsPhysics extends JavaPlugin {
 
             // Start collisions updater
             getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> SHULKER_LISTENER.updateCollisions(), 1, 1);
+
+            if (Config.removeShulkersOnChunkLoad()) {
+                CHUNK_LOAD_LISTENER = new ChunkLoadListener();
+                getServer().getPluginManager().registerEvents(CHUNK_LOAD_LISTENER, this);
+            }
         }
 
         metrics.addCustomChart(new Metrics.SimplePie("door_method", () -> Config.getCollisionMethod().getOrDefault(DoorType.DOOR, CollisionMethod.NONE).name()));
