@@ -48,8 +48,9 @@ public final class BigDoorsPhysics extends JavaPlugin {
 
         // Notify of detailed logging
         if (Config.detailedLogging()) {
-            getLogger().info("More detailed logging is enabled, expect console spam");
-            getLogger().info("You can disable this in ~/plugins/BigDoorsPhysics/config.yml -> detailed-logging -> false");
+            getLogger().warning("More detailed logging is enabled, expect console spam");
+            getLogger().warning("You can disable this in:");
+            getLogger().warning("  ~/plugins/BigDoorsPhysics/config.yml -> detailed-logging -> false");
         }
 
         // Enable metrics
