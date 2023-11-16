@@ -73,7 +73,7 @@ public class Config {
     static String removeShulkersOnChunkLoadComment =
             "# This setting will check for leftover shulkers whenever a chunk loads\n" +
             "# ONLY enable this setting if you have to run /killbigdoorsphysicsentities frequently\n" +
-            "it may have a minor performance impact if your server has a lot of entities\n";
+            "# This setting may have a performance impact if your server has a lot of entities\n";
 
     static String hideBarriersComment =
             "### Barrier Options\n" +
