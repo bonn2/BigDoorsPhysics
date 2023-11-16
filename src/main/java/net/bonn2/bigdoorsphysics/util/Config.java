@@ -4,7 +4,10 @@ import nl.pim16aap2.bigDoors.util.DoorType;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +25,11 @@ public class Config {
     static boolean cullDistantShulkers = true;
     static int shulkerCullDistance = 4;
     static boolean spawnShulkersOnDoor = PLUGIN.getServer().getPluginManager().isPluginEnabled("ProtocolLib");
+    static boolean removeShulkersOnChunkLoad = false;
     static boolean hideBarriers = true;
     static boolean movePlayerWithBarrier = true;
     static boolean checkForUpdates = true;
+    static boolean detailedLogging = false;
 
     static String collisionMethodComment =
             "# How the plugin should create the colliders\n" +
@@ -66,6 +71,11 @@ public class Config {
             "# Enabling this can help with compatibility with region plugins (Specifically if you are using regions to control mob spawning)\n" +
             "# By default this is enabled if ProtocolLib is on the server and shulkers will instead be hidden during setup using packets\n";
 
+    static String removeShulkersOnChunkLoadComment =
+            "# This setting will check for leftover shulkers whenever a chunk loads\n" +
+            "# ONLY enable this setting if you have to run /killbigdoorsphysicsentities frequently\n" +
+            "# This setting may have a performance impact if your server has a lot of entities\n";
+
     static String hideBarriersComment =
             "### Barrier Options\n" +
             "\n" +
@@ -81,6 +91,9 @@ public class Config {
             "\n" +
             "# Whether or not to check for updates via https://modrinth.com/\n" +
             "# Updates will only be checked for on startup\n";
+
+    static String detailedLoggingComment =
+            "# Enable more detailed logging for debugging\n";
 
     public static void load() {
         YamlConfiguration config = new YamlConfiguration();
@@ -203,6 +216,14 @@ public class Config {
             needToUpgrade = true;
         }
 
+        // Get removeShulkersOnChunkLoad
+        if (config.contains("remove-shulkers-on-chunk-load"))
+            removeShulkersOnChunkLoad = config.getBoolean("remove-shulkers-on-chunk-load");
+        else {
+            warnMissing("remove-shulkers-on-chunk-load");
+            needToUpgrade = true;
+        }
+
         // Get hideBarriers
         if (config.contains("hide-barriers"))
             hideBarriers = config.getBoolean("hide-barriers");
@@ -229,6 +250,14 @@ public class Config {
             checkForUpdates = config.getBoolean("check-for-updates");
         } else {
             warnMissing("check-for-updates");
+            needToUpgrade = true;
+        }
+
+        // Get detailedLogging
+        if (config.contains("detailed-logging")) {
+            detailedLogging = config.getBoolean("detailed-logging");
+        } else {
+            warnMissing("detailed-logging");
             needToUpgrade = true;
         }
 
@@ -290,6 +319,10 @@ public class Config {
                             "spawn-shulkers-on-door: " +
                             spawnShulkersOnDoor +
                             "\n\n" +
+                            removeShulkersOnChunkLoadComment +
+                            "remove-shulkers-on-chunk-load: " +
+                            removeShulkersOnChunkLoad +
+                            "\n\n" +
                             hideBarriersComment +
                             "hide-barriers: " +
                             hideBarriers +
@@ -301,6 +334,10 @@ public class Config {
                             checkForUpdatesComment +
                             "check-for-updates: " +
                             checkForUpdates +
+                            "\n\n" +
+                            detailedLoggingComment +
+                            "detailed-logging: " +
+                            detailedLogging +
                             "\n";
             output.write(builder.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
@@ -336,6 +373,10 @@ public class Config {
         return spawnShulkersOnDoor;
     }
 
+    public static boolean removeShulkersOnChunkLoad() {
+        return removeShulkersOnChunkLoad;
+    }
+
     public static boolean hideBarriers() {
         return hideBarriers;
     }
@@ -346,5 +387,9 @@ public class Config {
 
     public static boolean checkForUpdates() {
         return checkForUpdates;
+    }
+
+    public static boolean detailedLogging() {
+        return detailedLogging;
     }
 }
