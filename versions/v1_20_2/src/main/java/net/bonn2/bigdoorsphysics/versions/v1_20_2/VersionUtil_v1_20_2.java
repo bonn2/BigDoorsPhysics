@@ -35,6 +35,6 @@ public class VersionUtil_v1_20_2 implements VersionUtil {
 
     @Override
     public double getShulkerOffset() {
-        return 0.74063;
+        return 0.9875;
     }
 }
