@@ -50,7 +50,7 @@ public class ShulkerListener implements Listener {
                                 && player.getLocation().getY() > block.getBoundingBox().getCenterY()) {
                             player.teleport(player.getLocation().add(
                                     0,
-                                    player.getLocation().getY() - block.getBoundingBox().getCenterY() + 0.05,
+                                    player.getLocation().getY() - block.getBoundingBox().getCenterY() + Config.playerSunkenIntoShulkerYExtra(),
                                     0));
                         }
                     }

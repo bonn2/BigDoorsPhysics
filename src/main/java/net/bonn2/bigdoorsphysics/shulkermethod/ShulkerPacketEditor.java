@@ -59,7 +59,7 @@ public class ShulkerPacketEditor {
                             if (Objects.equals(entity.getCustomName(), "BigDoorsPhysicsAS")) {
                                 PacketContainer packetContainer = event.getPacket().deepClone();
                                 // Calculate the distance
-                                double distance = event.getPlayer().getLocation().distance(entity.getLocation().add(0, ColliderShulker.SHULKER_OFFSET, 0));
+                                double distance = event.getPlayer().getLocation().distance(entity.getLocation().add(0, BigDoorsPhysics.VERSION_UTIL.getShulkerOffset(), 0));
                                 // Only cull shulker if they are too far away to interact with
                                 if (distance > Config.shulkerCullDistance()) {
                                     packetContainer.getModifier().write(2, event.getPlayer().getWorld().getMaxHeight() + 10000);
@@ -86,7 +86,7 @@ public class ShulkerPacketEditor {
                                 event.setCancelled(true);
 
                                 // Calculate distance
-                                double distance = event.getPlayer().getLocation().distance(entity.getLocation().add(0, ColliderShulker.SHULKER_OFFSET, 0));
+                                double distance = event.getPlayer().getLocation().distance(entity.getLocation().add(0, BigDoorsPhysics.VERSION_UTIL.getShulkerOffset(), 0));
 
                                 // Create replacement teleportation packet
                                 PacketContainer newPacket;
