@@ -23,6 +23,12 @@ public interface VersionUtil {
 
     void setEntityInvisible(LivingEntity entity);
 
+    /**
+     * Gets the version appropriate vertical offset to teleport shulkers riding armor stands
+     * @return A positive double representing the offset
+     */
+    double getShulkerOffset();
+
     static int getMajorVersion() {
         return Integer.parseInt(Bukkit.getVersion().split("\\.")[1].replace(")", ""));
     }

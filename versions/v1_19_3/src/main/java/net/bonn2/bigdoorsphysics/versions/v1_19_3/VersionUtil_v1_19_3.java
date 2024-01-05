@@ -28,4 +28,9 @@ public class VersionUtil_v1_19_3 implements VersionUtil {
     public void setEntityInvisible(LivingEntity entity) {
         entity.setInvisible(true);
     }
+
+    @Override
+    public double getShulkerOffset() {
+        return 0.9875;
+    }
 }

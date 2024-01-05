@@ -15,7 +15,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class ColliderShulker {
-    public static final double SHULKER_OFFSET = 0.74063;
 
     private final Location spawnLocation;
     private Shulker shulker;
@@ -53,7 +52,7 @@ public class ColliderShulker {
 
     public void place() {
         Location adjustedSpwanLocation = Config.spawnShulkersOnDoor() ?
-                spawnLocation.clone().subtract(0, SHULKER_OFFSET,0) :
+                spawnLocation.clone().subtract(0, BigDoorsPhysics.VERSION_UTIL.getShulkerOffset(), 0) :
                 spawnLocation.clone().add(0, 100000 + spawnLocation.getWorld().getMaxHeight(),0);
 
         armorStand = spawnLocation.getWorld().spawn(adjustedSpwanLocation, ArmorStand.class, entity -> {
@@ -84,15 +83,15 @@ public class ColliderShulker {
             entity.setSilent(true);
             entity.setCanPickupItems(false);
             armorStand.addPassenger(entity);
-            armorStand.teleport(spawnLocation.subtract(0, SHULKER_OFFSET, 0));
+            armorStand.teleport(spawnLocation.subtract(0, BigDoorsPhysics.VERSION_UTIL.getShulkerOffset(), 0));
         });
     }
 
     public void move(@NotNull Location location, Vector velocity) {
-        Location newLocation = location.clone().subtract(0, SHULKER_OFFSET, 0);
+        Location newLocation = location.clone().subtract(0, BigDoorsPhysics.VERSION_UTIL.getShulkerOffset(), 0);
         if (newLocation == location) return;
 
-        BigDoorsPhysics.VERSION_UTIL.teleportWithPassenger(armorStand, shulker, location.clone().subtract(0, SHULKER_OFFSET, 0));
+        BigDoorsPhysics.VERSION_UTIL.teleportWithPassenger(armorStand, shulker, location.clone().subtract(0, BigDoorsPhysics.VERSION_UTIL.getShulkerOffset(), 0));
 
         if (Config.movePlayerWithShulker()) {
             for (Player player : location.getWorld().getPlayers()) {

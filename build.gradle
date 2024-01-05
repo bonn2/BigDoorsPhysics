@@ -11,8 +11,8 @@ allprojects {
     repositories {
         mavenCentral()
         maven {
-            name 'spigot'
-            url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+            name = 'spigot'
+            url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
         }
         maven {
             name = 'papermc-repo'
@@ -56,7 +56,7 @@ processResources {
     }
 }
 
-def mainProjects = [':', ':versions', ':versions:v1_16_3', ':versions:v1_19', ':versions:v1_19_3']
+def mainProjects = [':', ':versions', ':versions:v1_16_3', ':versions:v1_19', ':versions:v1_19_3', ':versions:v1_20_2']
 tasks.register('oneJar', Jar) {
     archiveClassifier = 'versioned'
     dependsOn mainProjects.collect { it + ":compileJava" }

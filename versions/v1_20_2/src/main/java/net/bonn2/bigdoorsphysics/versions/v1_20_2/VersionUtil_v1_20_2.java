@@ -1,17 +1,18 @@
-package net.bonn2.bigdoorsphysics.versions.j11.v1_16_3;
+package net.bonn2.bigdoorsphysics.versions.v1_20_2;
 
+import io.papermc.paper.entity.TeleportFlag;
 import net.bonn2.bigdoorsphysics.versions.VersionUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-public class VersionUtil_v1_16_3 implements VersionUtil {
+public class VersionUtil_v1_20_2 implements VersionUtil {
 
     @Override
     public boolean test() {
         try {
-            Entity.class.getMethod("teleport", Location.class);
-        } catch (Exception ignored) {
+            Class.forName("io.papermc.paper.entity.TeleportFlag");
+        } catch (ClassNotFoundException e) {
             return false;
         }
         return true;
@@ -19,9 +20,7 @@ public class VersionUtil_v1_16_3 implements VersionUtil {
 
     @Override
     public void teleportWithPassenger(Entity entity, Entity passenger, Location location) {
-        entity.removePassenger(passenger);
-        entity.teleport(location);
-        entity.addPassenger(passenger);
+        entity.teleport(location, TeleportFlag.EntityState.RETAIN_PASSENGERS);
     }
 
     @Override
