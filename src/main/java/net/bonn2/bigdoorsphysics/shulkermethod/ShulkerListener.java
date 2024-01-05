@@ -90,7 +90,7 @@ public class ShulkerListener implements Listener {
             if (!Config.getCollisionMethod().getOrDefault(BLOCK_MOVERS.get(id).getDoor().getType(), CollisionMethod.NONE).equals(CollisionMethod.SHULKER)) continue;
             // Get saved blocks
             List<MyBlockData> doorBlocks = BLOCK_MOVERS.get(id).getSavedBlocks();
-            if (doorBlocks.size() == 0) continue;
+            if (doorBlocks.isEmpty()) continue;
             // Update shulker locations
             if (COLLIDERS.containsKey(id)) {
                 for (int i = 0; i < doorBlocks.size(); i++) {
