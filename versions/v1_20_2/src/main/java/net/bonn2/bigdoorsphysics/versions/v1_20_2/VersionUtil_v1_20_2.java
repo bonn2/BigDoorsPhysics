@@ -13,7 +13,7 @@ public class VersionUtil_v1_20_2 implements VersionUtil {
     @Override
     public boolean test() {
         // Check if version is before 1.20.2
-        if (new ComparableVersion(Bukkit.getMinecraftVersion()).compareTo(new ComparableVersion("1.20.2")) < 0) return false;
+        if (new ComparableVersion(Bukkit.getVersion().split("MC: ")[1].replace(")", "")).compareTo(new ComparableVersion("1.20.2")) < 0) return false;
         // Check if server supports new teleport system
         try {
             Class.forName("io.papermc.paper.entity.TeleportFlag");
