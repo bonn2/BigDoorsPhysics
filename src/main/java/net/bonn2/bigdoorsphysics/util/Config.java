@@ -22,6 +22,7 @@ public class Config {
     static boolean cullDistantShulkers = true;
     static int shulkerCullDistance = 4;
     static boolean spawnShulkersOnDoor = PLUGIN.getServer().getPluginManager().isPluginEnabled("ProtocolLib");
+    static double playerSunkenIntoShulkerYExtra = 0.05;
     static boolean hideBarriers = true;
     static boolean movePlayerWithBarrier = true;
     static boolean checkForUpdates = true;
@@ -65,6 +66,12 @@ public class Config {
             "# When this is set to false the shulkers will be spawned ~100k blocks above the world height to hide them while they are being set up\n" +
             "# Enabling this can help with compatibility with region plugins (Specifically if you are using regions to control mob spawning)\n" +
             "# By default this is enabled if ProtocolLib is on the server and shulkers will instead be hidden during setup using packets\n";
+
+    static String playerSunkenIntoShulkerYExtraComment =
+            "# Only change this setting if you are having issues with players being stuck inside of shulkers that are *not* moving upwards!\n" +
+            "# This changes the extra distance that BDP will move a player upwards when they are detected to have sunken into a moving shulker\n" +
+            "# This *may* help players who have poor ping.\n" +
+            "# A reasonable value to begin testing at should be 0.1 rather than the default 0.05, however the optimal number will be different for every server.\n";
 
     static String hideBarriersComment =
             "### Barrier Options\n" +
@@ -203,6 +210,14 @@ public class Config {
             needToUpgrade = true;
         }
 
+        // Get playerSunkenIntoShulkerYExtra
+        if (config.contains("player-sunken-into-shulker-y-extra"))
+            playerSunkenIntoShulkerYExtra = config.getDouble("player-sunken-into-shulker-y-extra");
+        else  {
+            warnMissing("player-sunken-into-shulker-y-extra");
+            needToUpgrade = true;
+        }
+
         // Get hideBarriers
         if (config.contains("hide-barriers"))
             hideBarriers = config.getBoolean("hide-barriers");
@@ -290,6 +305,10 @@ public class Config {
                             "spawn-shulkers-on-door: " +
                             spawnShulkersOnDoor +
                             "\n\n" +
+                            playerSunkenIntoShulkerYExtraComment +
+                            "player-sunken-into-shulker-y-extra: " +
+                            playerSunkenIntoShulkerYExtra +
+                            "\n\n" +
                             hideBarriersComment +
                             "hide-barriers: " +
                             hideBarriers +
@@ -334,6 +353,10 @@ public class Config {
 
     public static boolean spawnShulkersOnDoor() {
         return spawnShulkersOnDoor;
+    }
+
+    public static double playerSunkenIntoShulkerYExtra() {
+        return playerSunkenIntoShulkerYExtra;
     }
 
     public static boolean hideBarriers() {
