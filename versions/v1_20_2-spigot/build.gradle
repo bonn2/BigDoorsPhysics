@@ -1,0 +1,10 @@
+dependencies {
+    compileOnly project(path: ':versions')
+    compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}

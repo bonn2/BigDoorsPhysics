@@ -7,9 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class VersionUtilProvider {
@@ -52,19 +50,29 @@ public class VersionUtilProvider {
             String version2 = getVersionNumber(clazz2.getSimpleName());
             return compareVersions(version1, version2);
         }
-
+// todo: make sure spigot versions are always less than standard versions
         @Contract(pure = true)
         private @NotNull String getVersionNumber(@NotNull String className) {
-            return className.replaceAll("[^0-9]+", "");
+            return className.replaceAll("VersionUtil_v", "");
         }
 
         private int compareVersions(@NotNull String version1, @NotNull String version2) {
-            String[] parts1 = version1.split("_");
-            String[] parts2 = version2.split("_");
+            List<String> parts1 = new ArrayList<>(List.of(version1.split("_")));
+            List<String> parts2 = new ArrayList<>(List.of(version2.split("_")));
 
-            for (int i = 0; i < Math.min(parts1.length, parts2.length); i++) {
-                int num1 = Integer.parseInt(parts1[i]);
-                int num2 = Integer.parseInt(parts2[i]);
+            // Add .0 to the end of two digit version numbers
+            if (parts1.size() == 2) parts1.add("0");
+            if (parts2.size() == 2) parts2.add("0");
+
+            // Set last version point to 0 or 1 depending on if server only support spigot level api
+            if (Objects.equals(parts1.get(parts1.size() - 1), "spigot")) parts1.set(parts1.size() - 1, "0");
+            else parts1.add("1");
+            if (Objects.equals(parts2.get(parts2.size() - 1), "spigot")) parts2.set(parts2.size() - 1, "0");
+            else parts2.add("1");
+
+            for (int i = 0; i < Math.min(parts1.size(), parts2.size()); i++) {
+                int num1 = Integer.parseInt(parts1.get(i));
+                int num2 = Integer.parseInt(parts2.get(i));
 
                 if (num1 < num2) {
                     return 1;
@@ -72,8 +80,7 @@ public class VersionUtilProvider {
                     return -1;
                 }
             }
-
-            return Integer.compare(parts2.length, parts1.length); // Reverse the comparison result
+            return 0;
         }
     }
 }

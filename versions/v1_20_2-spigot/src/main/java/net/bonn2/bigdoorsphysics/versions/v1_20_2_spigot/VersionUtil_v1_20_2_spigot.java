@@ -1,13 +1,12 @@
-package net.bonn2.bigdoorsphysics.versions.v1_20_2;
+package net.bonn2.bigdoorsphysics.versions.v1_20_2_spigot;
 
-import io.papermc.paper.entity.TeleportFlag;
 import net.bonn2.bigdoorsphysics.versions.VersionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-public class VersionUtil_v1_20_2 implements VersionUtil {
+public class VersionUtil_v1_20_2_spigot implements VersionUtil {
 
     @Override
     public boolean test() {
@@ -18,18 +17,14 @@ public class VersionUtil_v1_20_2 implements VersionUtil {
             if (version.length == 2) return false; // Version is 1.20
             if (Integer.parseInt(version[2]) < 2) return false; // Version is 1.20.1
         }
-        // Check if server supports new teleport system
-        try {
-            Class.forName("io.papermc.paper.entity.TeleportFlag");
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public void teleportWithPassenger(Entity entity, Entity passenger, Location location) {
-        entity.teleport(location, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+        entity.removePassenger(passenger);
+        entity.teleport(location);
+        entity.addPassenger(passenger);
     }
 
     @Override
