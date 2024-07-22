@@ -30,7 +30,11 @@ public interface VersionUtil {
     double getShulkerOffset();
 
     static int getMajorVersion() {
-        return Integer.parseInt(Bukkit.getVersion().split("\\.")[1].replace(")", ""));
+        return Integer.parseInt(Bukkit.getVersion()
+                .split("\\.")[1]
+                .replace(")", "")
+                .split("-")[0]
+        );
     }
 
     static boolean isSpigot() {
