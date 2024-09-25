@@ -35,7 +35,7 @@ allprojects {
 
 dependencies {
     implementation project(':versions')
-    implementation 'org.jetbrains:annotations:24.0.1'
+    implementation 'org.jetbrains:annotations:25.0.0'
     shadow 'org.reflections:reflections:0.10.2'
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     compileOnly 'nl.pim16aap2:BigDoors:0.1.8.46'
