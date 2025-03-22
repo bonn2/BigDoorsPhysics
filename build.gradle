@@ -39,7 +39,7 @@ dependencies {
     shadow 'org.reflections:reflections:0.10.2'
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     compileOnly 'nl.pim16aap2:BigDoors:0.1.8.46'
-    compileOnly 'com.comphenix.protocol:ProtocolLib:5.0.0'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.3.0'
 }
 
 java {
