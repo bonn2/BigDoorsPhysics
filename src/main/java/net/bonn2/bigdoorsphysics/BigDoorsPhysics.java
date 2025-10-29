@@ -28,13 +28,6 @@ public final class BigDoorsPhysics extends JavaPlugin {
         // Plugin startup logic
         PLUGIN = this;
 
-        // Check if installed BigDoors version supports BlockMover#getSavedBlocks()
-        if (BigDoors.get().getBuild() < 1119) {
-            getLogger().severe("BigDoors version is too old! Please update before using!");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         // Load the config
         getLogger().info("Loading Config");
         Config.load();
